@@ -59,8 +59,6 @@ public:
         _NodeParaResult = paraNode;
         paraNode->_NodesFuncInput[_Identifier] = this;
     }
-};
-
 //------------------------------------------------------------------------------
 
 protected:
@@ -87,5 +85,7 @@ protected:
     }
 
 //------------------------------------------------------------------------------
+
+};
 
 #endif //FUNCTION_NODE_H_INCLUDED
