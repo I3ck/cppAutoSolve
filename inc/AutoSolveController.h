@@ -4,6 +4,7 @@
 #include "../cppAutoSolve.h"
 
 #include <set>
+#include <stdexcept>
 
 #define DEBUG
 
@@ -62,21 +63,32 @@ public:
         _UncalculatedFunctions.insert(fNode);
     }
 
-    void connect_function_with_input(FunctionNode<T>*fNode, ParameterNode<T>* pNode) {
+    void connect_function_with_input(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
+        if(_UncalculatedFunctions.find(fNode) == _UncalculatedFunctions.end())
+            throw std::runtime_error("Function node you are trying to connect not added yet. Make sure to add THEN connect");
+
+        if(_UncalculatedParameters.find(pNode) == _UncalculatedParameters.end()
+            && _CalculatedParameters.find(pNode) == _CalculatedParameters.end())
+            throw std::runtime_error("Parameter node you are trying to connect not added yet. Make sure to add THEN connect");
+
         fNode->connect_with_input(pNode);
     }
 
-    void connect_function_with_output(FunctionNode<T>*fNode, ParameterNode<T>* pNode) {
+    void connect_function_with_output(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
+        if(_UncalculatedFunctions.find(fNode) == _UncalculatedFunctions.end())
+            throw std::runtime_error("Function node you are trying to connect not added yet. Make sure to add THEN connect");
+
+        if(_UncalculatedParameters.find(pNode) == _UncalculatedParameters.end()
+            && _CalculatedParameters.find(pNode) == _CalculatedParameters.end())
+            throw std::runtime_error("Parameter node you are trying to connect not added yet. Make sure to add THEN connect");
+
         fNode->connect_with_output(pNode);
     }
 
     bool solve() {
         if(!system_is_valid()) {
-            cout << "SYSTEM INVALID" << endl; ///@todo throw exception? (or add error parameter)
             return false;
         }
-        ///@todo proper error cases
-        ///@todo check all nodes for required connections != nullptr
 
         #ifdef DEBUG
             cout << "SOLVING" << endl;
@@ -117,6 +129,9 @@ public:
             auto todo = _ToBeCalculatedFunctions.begin();
             auto todoF = *todo;
             _ToBeCalculatedFunctions.erase(todo);
+
+            if(!todoF->is_valid())
+                return false;
 
             todoF->solve();
             ///@todo below only if above was successful

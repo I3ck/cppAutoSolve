@@ -50,6 +50,7 @@ TEST_CASE("first case") {
 
     controller.add(&fn1);
     controller.add(&fn2);
+    controller.add(&fn3);
     controller.add(&x);
     controller.add(&y);
     controller.add(&z);
