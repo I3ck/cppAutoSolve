@@ -16,74 +16,81 @@
 template <typename T>
 class AutoSolveController {
 private:
+    ///@todo do all containers have to be searchable?
     std::set<ParameterNode<T>*>
-        _UncalculatedParameters,
-        _CalculatedParameters;
+        _UncalculatedParameters, //all the parameter nodes, of which the value is unknown
+        _CalculatedParameters; //all the parameter nodes, of which the value is known
 
     std::set<FunctionNode<T>*>
-        _UncalculatedFunctions,
-        _ToBeCalculatedFunctions;
+        _UncalculatedFunctions, //functions which were never called
+        _ToBeCalculatedFunctions; //functions which have to be used
 
-    bool system_is_valid() {
-        #ifdef DEBUG
-            cout << "checking sizes" << endl;
-        #endif
+    bool system_is_valid() { //checking whether the initial state of the system is fine
         if(_UncalculatedParameters.size() == 0 || _UncalculatedFunctions.size() == 0)
-            return false;
-        #ifdef DEBUG
-            cout << "checking parameters" << endl;
-        #endif
+            return false; //nothing to do in this case
+
         for(auto uncalculatedP : _UncalculatedParameters) {
             if(!uncalculatedP->is_valid())
-                return false;
+                return false; //all uncalculated parameters have to be valid
         }
-        #ifdef DEBUG
-            cout << "checking functions" << endl;
-        #endif
+
+        for(auto calculatedP : _CalculatedParameters) {
+            if(!CalculatedP->is_valid())
+                return false; //all calculated parameters have to be valid
+        }
 
         for(auto uncalculatedF : _UncalculatedFunctions) {
             if(!uncalculatedF->is_valid())
-                return false;
+                return false; //all uncalculated functions have to be valid
         }
 
-        return true;
+        return true; //all checks passed
     }
 
 public:
+
+    //add a parameter node to the system
     void add(ParameterNode<T>* pNode) {
-        if(pNode->_Calculated)
+        if(pNode->_Calculated) //if already calculated, insert to calculated set
             _CalculatedParameters.insert(pNode);
-        else
+        else //else insert to uncalculated set
             _UncalculatedParameters.insert(pNode);
     }
 
+    //add a function node to the system
     void add(FunctionNode<T>* fNode) {
+        if(fNode->_Calulated) //all function nodes should be uncalculated in the beginning
+            throw std::runtime_error("Do not add already calculated function nodes");
         _UncalculatedFunctions.insert(fNode);
     }
 
+    //define connections between function- and parameter nodes
     void connect_function_with_input(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
-        if(_UncalculatedFunctions.find(fNode) == _UncalculatedFunctions.end())
+        if(_UncalculatedFunctions.find(fNode) == _UncalculatedFunctions.end()) //only allow connections to added nodes
             throw std::runtime_error("Function node you are trying to connect not added yet. Make sure to add THEN connect");
 
         if(_UncalculatedParameters.find(pNode) == _UncalculatedParameters.end()
-            && _CalculatedParameters.find(pNode) == _CalculatedParameters.end())
+            && _CalculatedParameters.find(pNode) == _CalculatedParameters.end()) //only allow connections to added nodes
             throw std::runtime_error("Parameter node you are trying to connect not added yet. Make sure to add THEN connect");
 
         fNode->connect_with_input(pNode);
     }
 
+    //define connections between function- and parameter nodes
     void connect_function_with_output(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
-        if(_UncalculatedFunctions.find(fNode) == _UncalculatedFunctions.end())
+        if(_UncalculatedFunctions.find(fNode) == _UncalculatedFunctions.end()) //only allow connections to added nodes
             throw std::runtime_error("Function node you are trying to connect not added yet. Make sure to add THEN connect");
 
         if(_UncalculatedParameters.find(pNode) == _UncalculatedParameters.end()
-            && _CalculatedParameters.find(pNode) == _CalculatedParameters.end())
+            && _CalculatedParameters.find(pNode) == _CalculatedParameters.end()) //only allow connections to added nodes
             throw std::runtime_error("Parameter node you are trying to connect not added yet. Make sure to add THEN connect");
 
         fNode->connect_with_output(pNode);
     }
 
-    bool solve() {
+    //try to solve the system (true if all parameters could be calculated, false in all other cases)
+    bool solve() { ///@todo make sure this cant be called twice
+        //make sure the system is valid before solving it
         if(!system_is_valid()) {
             return false;
         }
@@ -92,50 +99,59 @@ public:
             cout << "SOLVING" << endl;
         #endif
 
+        //for all initally set parameters
+        //go the functions requiring them
+        //and check whether these can be calculated
+        //add to the todo in this case
 
+        //for all initally known parameters
         for(auto calculatedP : _CalculatedParameters) {
-            #ifdef DEBUG
-                cout << "CALCULATED PARA" << endl;
-            #endif
+
+            //find the function they're used as parameter in
             for(auto func : calculatedP->_NodesFuncOutput) {
-                #ifdef DEBUG
-                    cout << "FUNCTION OF CALCULATED PARA" << endl;
-                #endif
-                ///@todo only if function not in calculated
+
+                //check whether these functions can be calculated
+                ///@todo make this a method (or use existing one)
                 bool allCalculated(true);
+
+                //check whether all inputs for this function are known
                 for(auto input : func.second->_NodesParaInput) {
                     if(!input.second->_Calculated) {
                         allCalculated = false;
                         break;
                     }
                 }
+                //add to todo if it can be solved
+                ///@todo renamed container to solveable functions and other to solved functions
                 if(allCalculated)
                     _ToBeCalculatedFunctions.insert(func.second);
             }
         }
 
+        //while there still are functions that can be solved
         while(_ToBeCalculatedFunctions.size() > 0) {
+            //get a new function which can be solved
             auto todo = _ToBeCalculatedFunctions.begin();
             auto todoF = *todo;
             _ToBeCalculatedFunctions.erase(todo);
 
+            //make sure it is fine and can be solved
             if(!todoF->is_valid())
                 return false;
 
-            todoF->solve();
-            _CalculatedParameters.insert(todoF->_NodeParaResult);
-            auto rem = _UncalculatedParameters.find(todoF->_NodeParaResult);
-            ///@todo only if found
-            _UncalculatedParameters.erase(rem);
+            todoF->solve(); //solve the function
 
-            //check whether the solved parameter can be used in a function
+            _CalculatedParameters.insert(todoF->_NodeParaResult); //add its output to known parameters
+            if(_UncalculatedParameters.find(todoF->_NodeParaResult) != _UncalculatedParameters.end(); //and remove it from the unknown parameters
+                _UncalculatedParameters.erase(_UncalculatedParameters.find(todoF->_NodeParaResult));
 
-            ///@todo same code as above, except the first line
+            //now check whether the now known output parameter
+            //can be used to solve any of its functions
+            ///@todo same code as above, except the first line (make method?)
+
+            //for all the functions this parameter is used in
             for(auto func : todoF->_NodeParaResult->_NodesFuncOutput) {
-                #ifdef DEBUG
-                    cout << "FUNCTION IN TODO" << endl;
-                #endif
-                ///@todo only if function not in calculated
+                //check whether they can be calculated
                 bool allCalculated(true);
                 for(auto input : func.second->_NodesParaInput) {
                     #ifdef DEBUG
@@ -146,14 +162,14 @@ public:
                         break;
                     }
                 }
-                if(allCalculated)
+                if(allCalculated) //if they can be calculated, add them to the todo
                     _ToBeCalculatedFunctions.insert(func.second);
             }
         }
-        //while functions in todo
-        //calculate their parameters
-        //move calculated parameters to calculated group
-        return true; ///@todo return false, if there still are uncalculated parameters
+
+        if(_UncalculatedParameters.size() > 0)
+            return false; //system could not be fully solved
+        return true; //system fully solved
     }
 
 

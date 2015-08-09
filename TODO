@@ -1,3 +1,1 @@
-BUGS
-
-output parameter not added to controller but in connections will result in endless loop
+throw exceptions if nodes are added twice?
