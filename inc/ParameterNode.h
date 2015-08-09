@@ -25,6 +25,13 @@ protected:
     std::string _Identifier;
     bool _Calculated;
     T _Val; ///@todo define getter
+
+    bool is_valid() {
+        if(_NodesFuncInput.size() == 0)
+            return false;
+        return true;
+    }
+
 public:
     ParameterNode(const std::string& identifier) :
         _Identifier(identifier),

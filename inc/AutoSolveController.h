@@ -25,6 +25,31 @@ private:
         _ToBeCalculatedFunctions,
         _CalculatedFunctions;
 
+    bool system_is_valid() {
+        #ifdef DEBUG
+            cout << "checking sizes" << endl;
+        #endif
+        if(_UncalculatedParameters.size() == 0 || _UncalculatedFunctions.size() == 0)
+            return false;
+        #ifdef DEBUG
+            cout << "checking parameters" << endl;
+        #endif
+        for(auto uncalculatedP : _UncalculatedParameters) {
+            if(!uncalculatedP->is_valid())
+                return false;
+        }
+        #ifdef DEBUG
+            cout << "checking functions" << endl;
+        #endif
+
+        for(auto uncalculatedF : _UncalculatedFunctions) {
+            if(!uncalculatedF->is_valid())
+                return false;
+        }
+
+        return true;
+    }
+
 public:
     void add(ParameterNode<T>* pNode) {
         if(pNode->_Calculated)
@@ -46,6 +71,10 @@ public:
     }
 
     bool solve() {
+        if(!system_is_valid()) {
+            cout << "SYSTEM INVALID" << endl; ///@todo throw exception? (or add error parameter)
+            return false;
+        }
         ///@todo proper error cases
         ///@todo check all nodes for required connections != nullptr
 

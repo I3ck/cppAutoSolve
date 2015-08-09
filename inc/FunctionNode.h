@@ -26,6 +26,7 @@ protected:
 
 public:
     FunctionNode(const std::string& identifier) :
+        _NodeParaResult(nullptr),
         _Identifier(identifier),
         _Calculated(false)
     {}
@@ -45,6 +46,13 @@ protected:
             if (!i.second->_Calculated)
                 return false;
         }
+        return true;
+    }
+    bool is_valid() {
+        if(_NodeParaResult == nullptr)
+            return false;
+        if(_NodesParaInput.size() == 0)
+            return false;
         return true;
     }
 
