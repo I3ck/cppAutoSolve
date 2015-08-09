@@ -6,12 +6,7 @@
 #include <set>
 #include <stdexcept>
 
-#define DEBUG
-
-#ifdef DEBUG
-    #include <iostream>
-    using namespace std;
-#endif
+//------------------------------------------------------------------------------
 
 template <typename T>
 class AutoSolveController {
@@ -24,6 +19,8 @@ private:
     std::set<FunctionNode<T>*>
         _UncalculatedFunctions, //functions which were never called
         _ToBeCalculatedFunctions; //functions which have to be used
+
+//------------------------------------------------------------------------------
 
     bool system_is_valid() { //checking whether the initial state of the system is fine
         if(_UncalculatedParameters.size() == 0 || _UncalculatedFunctions.size() == 0)
@@ -47,6 +44,8 @@ private:
         return true; //all checks passed
     }
 
+//------------------------------------------------------------------------------
+
 public:
 
     //add a parameter node to the system
@@ -63,6 +62,8 @@ public:
             throw std::runtime_error("Do not add already calculated function nodes");
         _UncalculatedFunctions.insert(fNode);
     }
+
+//------------------------------------------------------------------------------
 
     //define connections between function- and parameter nodes
     void connect_function_with_input(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
@@ -88,16 +89,14 @@ public:
         fNode->connect_with_output(pNode);
     }
 
+//------------------------------------------------------------------------------
+
     //try to solve the system (true if all parameters could be calculated, false in all other cases)
     bool solve() { ///@todo make sure this cant be called twice
         //make sure the system is valid before solving it
         if(!system_is_valid()) {
             return false;
         }
-
-        #ifdef DEBUG
-            cout << "SOLVING" << endl;
-        #endif
 
         //for all initally set parameters
         //go the functions requiring them
@@ -154,9 +153,6 @@ public:
                 //check whether they can be calculated
                 bool allCalculated(true);
                 for(auto input : func.second->_NodesParaInput) {
-                    #ifdef DEBUG
-                        cout << "CHECKING INPUTS" << endl;
-                    #endif
                     if(!input.second->_Calculated) {
                         allCalculated = false;
                         break;
@@ -171,8 +167,6 @@ public:
             return false; //system could not be fully solved
         return true; //system fully solved
     }
-
-
 };
 
 #endif //AUTO_SOLVE_CONTROLLER_H_INCLUDED

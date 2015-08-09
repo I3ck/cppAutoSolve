@@ -11,10 +11,15 @@ class ParameterNode;
 template <typename T>
 class AutoSolveController;
 
+//------------------------------------------------------------------------------
+
 template <typename T>
 class FunctionNode {
     friend class ParameterNode<T>;
     friend class AutoSolveController<T>;
+
+//------------------------------------------------------------------------------
+
 protected:
     ParameterNode<T>* _NodeParaResult;
 
@@ -22,7 +27,10 @@ protected:
         _NodesParaInput;
 
     std::string _Identifier;
+
     bool _Calculated;
+
+//------------------------------------------------------------------------------
 
 public:
     FunctionNode(const std::string& identifier) :
@@ -30,6 +38,8 @@ public:
         _Identifier(identifier),
         _Calculated(false)
     {}
+
+//------------------------------------------------------------------------------
 
     virtual void solve() {
         if(can_be_calculated() && !_Calculated) {
@@ -39,8 +49,13 @@ public:
         }
     }
 
+//------------------------------------------------------------------------------
+
 protected:
     virtual T calc() = 0;
+
+//------------------------------------------------------------------------------
+
     bool can_be_calculated() {
         for(auto i : _NodesParaInput) {
             if (!i.second->_Calculated)
@@ -48,6 +63,9 @@ protected:
         }
         return true;
     }
+
+//------------------------------------------------------------------------------
+
     bool is_valid() {
         if(_NodeParaResult == nullptr)
             return false;
@@ -55,6 +73,8 @@ protected:
             return false;
         return true;
     }
+
+//------------------------------------------------------------------------------
 
 public:
     void connect_with_input(ParameterNode<T>* paraNode) {

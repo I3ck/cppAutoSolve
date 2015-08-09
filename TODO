@@ -1,1 +1,11 @@
 throw exceptions if nodes are added twice?
+
+write README
+
+write some examples
+
+add more tests for known systems (current test only prints the result)
+
+possible to make inheritance of function node easier?
+
+make function and paranodes as proteced / private as possible
