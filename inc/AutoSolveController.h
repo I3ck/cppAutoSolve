@@ -18,13 +18,11 @@ class AutoSolveController {
 private:
     std::set<ParameterNode<T>*>
         _UncalculatedParameters,
-        _ToBeCalculatedParameters, ///@todo function group might be enough
         _CalculatedParameters;
 
     std::set<FunctionNode<T>*>
         _UncalculatedFunctions,
-        _ToBeCalculatedFunctions,
-        _CalculatedFunctions;
+        _ToBeCalculatedFunctions;
 
     bool system_is_valid() {
         #ifdef DEBUG
@@ -115,17 +113,8 @@ public:
                     _ToBeCalculatedFunctions.insert(func.second);
             }
         }
-        //INITIALLY or when todo is empty:
-        //for each calculated parameter go to its functions
-        //if all children of it are defined, move it from uncalculated to todo
-        //if todo is empty, break
 
-
-
-        while(_ToBeCalculatedFunctions.size() > 0) { ///@todo warning, possible endless loop
-            #ifdef DEBUG
-                cout << "TO BE CALCULATED: " << _ToBeCalculatedFunctions.size() << endl;
-            #endif
+        while(_ToBeCalculatedFunctions.size() > 0) {
             auto todo = _ToBeCalculatedFunctions.begin();
             auto todoF = *todo;
             _ToBeCalculatedFunctions.erase(todo);
@@ -134,7 +123,6 @@ public:
                 return false;
 
             todoF->solve();
-            ///@todo below only if above was successful
             _CalculatedParameters.insert(todoF->_NodeParaResult);
             auto rem = _UncalculatedParameters.find(todoF->_NodeParaResult);
             ///@todo only if found
