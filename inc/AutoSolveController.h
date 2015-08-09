@@ -91,24 +91,10 @@ public:
 
         //for all initally known parameters
         for(auto knownP : _KnownParameters) {
-
-            //find the function they're used as parameter in
+            //find the functions they're used as parameter in
             for(auto func : knownP->_OutputFunctionNodes) {
-
-                //check whether these functions can be calculated
-                ///@todo make this a method (or use existing one)
-                bool allCalculated(true);
-
-                //check whether all inputs for this function are known
-                for(auto input : func->_InputParameterNodes) {
-                    if(!input.second->_Known) {
-                        allCalculated = false;
-                        break;
-                    }
-                }
-
-                //add to todo if it can be solved
-                if(allCalculated)
+                //and add them to the todo if they can be calculaed
+                if(func->can_be_calculated())
                     _CalculateAbleFunctions.push(func);
             }
         }
@@ -131,19 +117,10 @@ public:
 
             //now check whether the now known output parameter
             //can be used to solve any of its functions
-            ///@todo same code as above, except the first line (make method?)
-
-            //for all the functions this parameter is used in
             for(auto func : todoF->_ResultParameterNode->_OutputFunctionNodes) {
                 //check whether they can be calculated
-                bool allCalculated(true);
-                for(auto input : func->_InputParameterNodes) {
-                    if(!input.second->_Known) {
-                        allCalculated = false;
-                        break;
-                    }
-                }
-                if(allCalculated) //if they can be calculated, add them to the todo
+                //and add them to the todo if they can be calculaed
+                if(func->can_be_calculated())
                     _CalculateAbleFunctions.push(func);
             }
         }
