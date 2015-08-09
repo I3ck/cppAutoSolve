@@ -26,16 +26,13 @@ protected:
     std::map<std::string, ParameterNode<T>*>
         _InputParameterNodes;
 
-    std::string _Identifier;
-
     bool _Calculated;
 
 //------------------------------------------------------------------------------
 
 public:
-    FunctionNode(const std::string& identifier) :
+    FunctionNode() :
         _ResultParameterNode(nullptr),
-        _Identifier(identifier),
         _Calculated(false)
     {}
 

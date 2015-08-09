@@ -4,7 +4,7 @@ This enables you to define and solve any system of equations, linear or not.
 
 
 
-##version 0.1
+##version 0.1.1
 
 ##solve any system
 define your functions by deriving from `FunctionNode` and implementing your own `calc()` method:
@@ -12,8 +12,6 @@ define your functions by deriving from `FunctionNode` and implementing your own 
 template <typename T>
 class YourFunction1 : public FunctionNode<T> {
 public:
-    YourFunction1(const std::string& id) : FunctionNode<T>(id) {}
-
     //define the function itself here
     //acess the parameters by name and return the result of the function
     T calc() {
@@ -23,8 +21,8 @@ public:
 ```
 After defining your `FunctionNodes`, instantiate them with an identifier:
 ```cpp
-YourFunction1<double> fn1("fn1");
-YourFunction2<double> fn2("fn2");
+YourFunction1<double> fn1;
+YourFunction2<double> fn2;
 ...
 ```
 

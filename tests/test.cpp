@@ -10,8 +10,6 @@ using namespace std;
 template <typename T>
 class FN1 : public FunctionNode<T> {
 public:
-    FN1(const std::string& id) : FunctionNode<T>(id) {}
-
     T calc() {
         return (FunctionNode<T>::_InputParameterNodes)["x"]->get_val() * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val();
     }
@@ -20,8 +18,6 @@ public:
 template <typename T>
 class FN2 : public FunctionNode<T> {
 public:
-    FN2(const std::string& id) : FunctionNode<T>(id) {}
-
     T calc() {
         return 18.0 * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val();
     }
@@ -30,17 +26,15 @@ public:
 template <typename T>
 class FN3 : public FunctionNode<T> {
 public:
-    FN3(const std::string& id) : FunctionNode<T>(id) {}
-
     T calc() {
         return (FunctionNode<T>::_InputParameterNodes)["x"]->get_val() * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val() + (FunctionNode<T>::_InputParameterNodes)["z"]->get_val();
     }
 };
 
 TEST_CASE("first case") {
-    FN1<double> fn1("fn1");
-    FN2<double> fn2("fn2");
-    FN3<double> fn3("fn3");
+    FN1<double> fn1;
+    FN2<double> fn2;
+    FN3<double> fn3;
     ParameterNode<double>
         x("x"), y("y"), z("z"), a("a");
 
