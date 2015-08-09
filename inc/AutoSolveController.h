@@ -17,10 +17,10 @@ private:
         _KnownParameters; //all the parameter nodes, of which the value is known
 
     std::set<FunctionNode<T>*>
-        _UncalculateAbleFunction; //functions which were never called
+        _UncalculateableFunctions; //functions which were never called
 
     std::queue<FunctionNode<T>*>
-        _CalculateAbleFunctions; //functions which have to be used
+        _CalculateableFunctions; //functions which have to be used
 
     bool _Solved;
 
@@ -43,14 +43,14 @@ public:
     void add(FunctionNode<T>* fNode) {
         if(fNode->_Calculated) //all function nodes should be uncalculated in the beginning
             throw std::runtime_error("Do not add already calculated function nodes");
-        _UncalculateAbleFunction.insert(fNode);
+        _UncalculateableFunctions.insert(fNode);
     }
 
 //------------------------------------------------------------------------------
 
     //define connections between function- and parameter nodes
     void connect_function_with_input(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
-        if(_UncalculateAbleFunction.find(fNode) == _UncalculateAbleFunction.end()) //only allow connections to added nodes
+        if(_UncalculateableFunctions.find(fNode) == _UncalculateableFunctions.end()) //only allow connections to added nodes
             throw std::runtime_error("Function node you are trying to connect not added yet. Make sure to add THEN connect");
 
         if(_UnknownParameters.find(pNode) == _UnknownParameters.end()
@@ -62,7 +62,7 @@ public:
 
     //define connections between function- and parameter nodes
     void connect_function_with_output(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
-        if(_UncalculateAbleFunction.find(fNode) == _UncalculateAbleFunction.end()) //only allow connections to added nodes
+        if(_UncalculateableFunctions.find(fNode) == _UncalculateableFunctions.end()) //only allow connections to added nodes
             throw std::runtime_error("Function node you are trying to connect not added yet. Make sure to add THEN connect");
 
         if(_UnknownParameters.find(pNode) == _UnknownParameters.end()
@@ -95,15 +95,15 @@ public:
             for(auto func : knownP->_OutputFunctionNodes) {
                 //and add them to the todo if they can be calculaed
                 if(func->can_be_calculated())
-                    _CalculateAbleFunctions.push(func);
+                    _CalculateableFunctions.push(func);
             }
         }
 
         //while there still are functions that can be solved
-        while(_CalculateAbleFunctions.size() > 0) {
+        while(_CalculateableFunctions.size() > 0) {
             //get a new function which can be solved
-            FunctionNode<T> *todoF = _CalculateAbleFunctions.front();
-            _CalculateAbleFunctions.pop();
+            FunctionNode<T> *todoF = _CalculateableFunctions.front();
+            _CalculateableFunctions.pop();
 
             //make sure it is fine and can be solved
             if(!todoF->is_valid())
@@ -121,7 +121,7 @@ public:
                 //check whether they can be calculated
                 //and add them to the todo if they can be calculaed
                 if(func->can_be_calculated())
-                    _CalculateAbleFunctions.push(func);
+                    _CalculateableFunctions.push(func);
             }
         }
 
@@ -137,7 +137,7 @@ public:
 private:
 
     bool system_is_valid() { //checking whether the initial state of the system is fine
-        if(_UnknownParameters.size() == 0 || _UncalculateAbleFunction.size() == 0)
+        if(_UnknownParameters.size() == 0 || _UncalculateableFunctions.size() == 0)
             return false; //nothing to do in this case
 
         for(auto unknownP : _UnknownParameters) {
@@ -150,7 +150,7 @@ private:
                 return false; //all known parameters have to be valid
         }
 
-        for(auto unknownF : _UncalculateAbleFunction) {
+        for(auto unknownF : _UncalculateableFunctions) {
             if(!unknownF->is_valid())
                 return false; //all unknown functions have to be valid
         }
