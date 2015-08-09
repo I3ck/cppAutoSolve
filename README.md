@@ -1,5 +1,5 @@
 #cppAutoSolve
-A header-only, templated C++ library which allows the automatical solving of function-parameter systems.  
+A header-only, templated C++ library which allows the automatic solving of function-parameter systems.  
 This enables you to define and solve any system of equations, linear or not.
 
 
