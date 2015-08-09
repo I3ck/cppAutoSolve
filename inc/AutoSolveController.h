@@ -27,9 +27,9 @@ public:
 
     //add a parameter node to the system
     void add(ParameterNode<T>* pNode) {
-        if(pNode->_Known) //if already calculated, insert to calculated set
+        if(pNode->_Known) //if already known, insert to known set
             _KnownParameters.insert(pNode);
-        else //else insert to uncalculated set
+        else //else insert to unknown set
             _UnknownParameters.insert(pNode);
     }
 
@@ -81,10 +81,10 @@ public:
         //add to the todo in this case
 
         //for all initally known parameters
-        for(auto calculatedP : _KnownParameters) {
+        for(auto knownP : _KnownParameters) {
 
             //find the function they're used as parameter in
-            for(auto func : calculatedP->_OutputFunctionNodes) {
+            for(auto func : knownP->_OutputFunctionNodes) {
 
                 //check whether these functions can be calculated
                 ///@todo make this a method (or use existing one)
@@ -97,8 +97,8 @@ public:
                         break;
                     }
                 }
+                
                 //add to todo if it can be solved
-                ///@todo renamed container to solveable functions and other to solved functions
                 if(allCalculated)
                     _CalculateAbleFunctions.push(func);
             }
@@ -151,19 +151,19 @@ private:
         if(_UnknownParameters.size() == 0 || _UncalculateAbleFunction.size() == 0)
             return false; //nothing to do in this case
 
-        for(auto uncalculatedP : _UnknownParameters) {
-            if(!uncalculatedP->is_valid())
-                return false; //all uncalculated parameters have to be valid
+        for(auto unknownP : _UnknownParameters) {
+            if(!unknownP->is_valid())
+                return false; //all unknown parameters have to be valid
         }
 
-        for(auto calculatedP : _KnownParameters) {
-            if(!calculatedP->is_valid())
-                return false; //all calculated parameters have to be valid
+        for(auto knownP : _KnownParameters) {
+            if(!knownP->is_valid())
+                return false; //all known parameters have to be valid
         }
 
-        for(auto uncalculatedF : _UncalculateAbleFunction) {
-            if(!uncalculatedF->is_valid())
-                return false; //all uncalculated functions have to be valid
+        for(auto unknownF : _UncalculateAbleFunction) {
+            if(!unknownF->is_valid())
+                return false; //all unknown functions have to be valid
         }
 
         return true; //all checks passed
