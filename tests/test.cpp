@@ -10,9 +10,7 @@ using namespace std;
 template <typename T>
 class FN1 : public FunctionNode<T> {
 public:
-    FN1(const std::string& id) :
-        FunctionNode<T>(id)
-    {}
+    FN1(const std::string& id) : FunctionNode<T>(id) {}
 
     T calc() {
         return (FunctionNode<T>::_NodesParaInput)["x"]->get_val() * (FunctionNode<T>::_NodesParaInput)["y"]->get_val();
@@ -22,51 +20,29 @@ public:
 template <typename T>
 class FN2 : public FunctionNode<T> {
 public:
-    FN2(const std::string& id) :
-        FunctionNode<T>(id)
-    {}
+    FN2(const std::string& id) : FunctionNode<T>(id) {}
 
     T calc() {
         return 18.0 * (FunctionNode<T>::_NodesParaInput)["y"]->get_val();
     }
 };
 
+template <typename T>
+class FN3 : public FunctionNode<T> {
+public:
+    FN3(const std::string& id) : FunctionNode<T>(id) {}
 
-
-
+    T calc() {
+        return (FunctionNode<T>::_NodesParaInput)["x"]->get_val() * (FunctionNode<T>::_NodesParaInput)["y"]->get_val() + (FunctionNode<T>::_NodesParaInput)["z"]->get_val();
+    }
+};
 
 TEST_CASE("first case") {
     FN1<double> fn1("fn1");
     FN2<double> fn2("fn2");
+    FN3<double> fn3("fn3");
     ParameterNode<double>
-        x("x"), y("y"), z("z");
-
-    y.set_val(7.5);
-
-    fn1.connect_with_input(&x);
-    fn1.connect_with_input(&y);
-    fn1.connect_with_output(&z);
-
-    fn2.connect_with_input(&y);
-    fn2.connect_with_output(&x);
-
-
-    fn1.solve();
-    fn2.solve();
-    fn1.solve();
-
-    SECTION("first section") {
-        cout << "x : " << x.get_val() << endl;
-        cout << "y : " << y.get_val() << endl;
-        cout << "z : " << z.get_val() << endl;
-    }
-}
-
-TEST_CASE("second case") {
-    FN1<double> fn1("fn1");
-    FN2<double> fn2("fn2");
-    ParameterNode<double>
-        x("x"), y("y"), z("z");
+        x("x"), y("y"), z("z"), a("a");
 
     y.set_val(7.5);
 
@@ -85,11 +61,16 @@ TEST_CASE("second case") {
     controller.connect_function_with_input(&fn2, &y);
     controller.connect_function_with_output(&fn2, &x);
 
-    controller.solve();
+    controller.connect_function_with_input(&fn3, &x);
+    controller.connect_function_with_input(&fn3, &y);
+    controller.connect_function_with_input(&fn3, &z);
+    controller.connect_function_with_output(&fn3, &a);
 
-    SECTION("first section") {
+    if(controller.solve()) {
+
         cout << "x : " << x.get_val() << endl;
         cout << "y : " << y.get_val() << endl;
         cout << "z : " << z.get_val() << endl;
+        cout << "a : " << a.get_val() << endl;
     }
 }
