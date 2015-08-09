@@ -19,7 +19,7 @@ public:
     }
 };
 ```
-After defining your `FunctionNodes`, instantiate them with an identifier:
+After defining your `FunctionNodes`, instantiate them:
 ```cpp
 YourFunction1<double> fn1;
 YourFunction2<double> fn2;
