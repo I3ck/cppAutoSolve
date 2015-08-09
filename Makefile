@@ -1,6 +1,6 @@
 CC = g++
 DEBUG ?= 0
-CFLAGS = -std=c++11
+CFLAGS = -std=c++11 -Wall
 
 .PHONY: tests, run_tests
 
