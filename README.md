@@ -26,7 +26,7 @@ YourFunction2<double> fn2;
 ...
 ```
 
-Then define your parameters by creation `ParameterNodes` with the name as identifier:
+Then define your parameters by creating `ParameterNodes` with the name as identifier:
 ```cpp
 ParameterNode<double>
     x("x"), y("y"), z("z"), a("a");
