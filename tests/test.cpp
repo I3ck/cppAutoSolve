@@ -3,6 +3,8 @@
 
 using namespace std;
 
+#include <iostream>
+
 #include "../cppAutoSolve.h"
 
 template <typename T>
@@ -17,13 +19,25 @@ public:
     }
 };
 
-FN1<double> fn1("fn1");
-ParameterNode<double>
-    x("x"), y("y");
+
 
 TEST_CASE("first case") {
+    FN1<double> fn1("fn1");
+    ParameterNode<double>
+        x("x"), y("y"), z("z");
+
+    x._Val = 3.0;
+    y._Val = 7.5;
+
+    fn1.connect_with_input(&x);
+    fn1.connect_with_input(&y);
+    fn1.connect_with_output(&z);
+
+    fn1.solve();
 
     SECTION("first section") {
-        REQUIRE(true);
+        cout << "x : " << x._Val << endl;
+        cout << "y : " << y._Val << endl;
+        cout << "z : " << z._Val << endl;
     }
 }
