@@ -52,10 +52,10 @@ controller.add(&x);
 ```
 
 Connect functions with their input and output parameters.  
-e = f1(x,y,z)  
+`e = f1(x,y,z)`  
 =>  
-e is output of f1  
-x,y,z input of f1
+`e` is output of `f1`  
+`x`,`y` and`z` inputs of `f1`
 ```cpp
 controller.connect_function_with_input(&f1, &x);
 controller.connect_function_with_input(&f1, &y);
