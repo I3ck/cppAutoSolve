@@ -9,8 +9,12 @@ template <typename T>
 class ParameterNode;
 
 template <typename T>
+class AutoSolveController;
+
+template <typename T>
 class FunctionNode {
     friend class ParameterNode<T>;
+    friend class AutoSolveController<T>;
 protected:
     ParameterNode<T>* _NodeParaResult;
 
@@ -28,6 +32,7 @@ public:
 
     virtual void solve() {
         if(can_be_calculated() && !_Calculated) {
+            _Calculated = true;
             _NodeParaResult->_Val = calc();
             _NodeParaResult->_Calculated = true;
         }

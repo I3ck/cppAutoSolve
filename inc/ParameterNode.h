@@ -9,8 +9,12 @@ template <typename T>
 class FunctionNode;
 
 template <typename T>
+class AutoSolveController;
+
+template <typename T>
 class ParameterNode {
     friend class FunctionNode<T>;
+    friend class AutoSolveController<T>;
 protected:
     ///@todo double linkage might not be required
     ///@todo mark all pointer members as such

@@ -61,3 +61,35 @@ TEST_CASE("first case") {
         cout << "z : " << z.get_val() << endl;
     }
 }
+
+TEST_CASE("second case") {
+    FN1<double> fn1("fn1");
+    FN2<double> fn2("fn2");
+    ParameterNode<double>
+        x("x"), y("y"), z("z");
+
+    y.set_val(7.5);
+
+    AutoSolveController<double> controller;
+
+    controller.add(&fn1);
+    controller.add(&fn2);
+    controller.add(&x);
+    controller.add(&y);
+    controller.add(&z);
+
+    controller.connect_function_with_input(&fn1, &x);
+    controller.connect_function_with_input(&fn1, &y);
+    controller.connect_function_with_output(&fn1, &z);
+
+    controller.connect_function_with_input(&fn2, &y);
+    controller.connect_function_with_output(&fn2, &x);
+
+    controller.solve();
+
+    SECTION("first section") {
+        cout << "x : " << x.get_val() << endl;
+        cout << "y : " << y.get_val() << endl;
+        cout << "z : " << z.get_val() << endl;
+    }
+}
