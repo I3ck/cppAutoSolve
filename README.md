@@ -4,7 +4,7 @@ This enables you to define and solve any system of equations, linear or not.
 
 
 
-##version 0.1.1
+##version 0.1.2
 
 ##solve any system
 define your functions by deriving from `FunctionNode` and implementing your own `calc()` method:
@@ -15,7 +15,7 @@ public:
     //define the function itself here
     //acess the parameters by name and return the result of the function
     T calc() {
-        return (FunctionNode<T>::_InputParameterNodes)["x"]->get_val() * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val();
+        return (FunctionNode<T>::_InputParameterNodes)["x"]->get() * (FunctionNode<T>::_InputParameterNodes)["y"]->get();
     }
 };
 ```
@@ -34,7 +34,7 @@ ParameterNode<double>
 
 Set values for known parameters:
 ```cpp
-y.set_val(7.5)
+y.set(7.5)
 ```
 
 Create the `AutoSolveController`:
@@ -70,7 +70,7 @@ controller.solve();
 ```
 
 If all parameters could be calculated, `solve()` will be `true`, otherwise `false`.  
-You can access the values with `ParameterNode.get_val()`
+You can access the values with `ParameterNode.get()`
 
 ##building the examples / tests
 `make`

@@ -11,7 +11,7 @@ template <typename T>
 class FN1 : public FunctionNode<T> {
 public:
     T calc() {
-        return (FunctionNode<T>::_InputParameterNodes)["x"]->get_val() * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val();
+        return (FunctionNode<T>::_InputParameterNodes)["x"]->get() * (FunctionNode<T>::_InputParameterNodes)["y"]->get();
     }
 };
 
@@ -19,7 +19,7 @@ template <typename T>
 class FN2 : public FunctionNode<T> {
 public:
     T calc() {
-        return 18.0 * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val();
+        return 18.0 * (FunctionNode<T>::_InputParameterNodes)["y"]->get();
     }
 };
 
@@ -27,7 +27,7 @@ template <typename T>
 class FN3 : public FunctionNode<T> {
 public:
     T calc() {
-        return (FunctionNode<T>::_InputParameterNodes)["x"]->get_val() * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val() + (FunctionNode<T>::_InputParameterNodes)["z"]->get_val();
+        return (FunctionNode<T>::_InputParameterNodes)["x"]->get() * (FunctionNode<T>::_InputParameterNodes)["y"]->get() + (FunctionNode<T>::_InputParameterNodes)["z"]->get();
     }
 };
 
@@ -38,7 +38,7 @@ TEST_CASE("first case") {
     ParameterNode<double>
         x("x"), y("y"), z("z"), a("a");
 
-    y.set_val(7.5);
+    y.set(7.5);
 
     AutoSolveController<double> controller;
 
@@ -63,8 +63,8 @@ TEST_CASE("first case") {
     controller.connect_function_with_output(&fn3, &a);
 
     REQUIRE(controller.solve());
-    REQUIRE(x.get_val() == 135.0);
-    REQUIRE(y.get_val() == 7.5);
-    REQUIRE(z.get_val() == 1012.5);
-    REQUIRE(a.get_val() == 2025.0);
+    REQUIRE(x.get() == 135.0);
+    REQUIRE(y.get() == 7.5);
+    REQUIRE(z.get() == 1012.5);
+    REQUIRE(a.get() == 2025.0);
 }

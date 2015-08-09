@@ -39,12 +39,12 @@ public:
 
 //------------------------------------------------------------------------------
 
-    void set_val(T val) {
+    void set(T val) {
         _Val = val;
         _Known = true;
     }
 
-    T get_val() const {
+    T get() const {
         return _Val;
     }
 
