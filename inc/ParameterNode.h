@@ -20,12 +20,20 @@ protected:
 
     std::string _Identifier;
     bool _Calculated;
-public:
     T _Val; ///@todo define getter
+public:
     ParameterNode(const std::string& identifier) :
         _Identifier(identifier),
         _Calculated(false)
     {}
+    void set_val(T val) {
+        _Val = val;
+        _Calculated = true;
+    }
+
+    T get_val() const {
+        return _Val;
+    }
 };
 
 #endif //PARAMETER_NODE_H_INCLUDED

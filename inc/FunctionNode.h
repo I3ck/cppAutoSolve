@@ -37,7 +37,7 @@ protected:
     virtual T calc() = 0;
     bool can_be_calculated() {
         for(auto i : _NodesParaInput) {
-            if (i.second->_Calculated)
+            if (!i.second->_Calculated)
                 return false;
         }
         return true;
