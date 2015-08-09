@@ -22,8 +22,14 @@ private:
     std::queue<FunctionNode<T>*>
         _CalculateAbleFunctions; //functions which have to be used
 
+    bool _Solved;
+
 //------------------------------------------------------------------------------
 public:
+
+    AutoSolveController() :
+        _Solved(false)
+    {}
 
     //add a parameter node to the system
     void add(ParameterNode<T>* pNode) {
@@ -69,7 +75,10 @@ public:
 //------------------------------------------------------------------------------
 
     //try to solve the system (true if all parameters could be calculated, false in all other cases)
-    bool solve() { ///@todo make sure this cant be called twice
+    bool solve() {
+        if(_Solved)
+            return false; //don't try to solve an already solved system
+
         //make sure the system is valid before solving it
         if(!system_is_valid()) {
             return false;
@@ -97,7 +106,7 @@ public:
                         break;
                     }
                 }
-                
+
                 //add to todo if it can be solved
                 if(allCalculated)
                     _CalculateAbleFunctions.push(func);
@@ -141,7 +150,10 @@ public:
 
         if(_UnknownParameters.size() > 0)
             return false; //system could not be fully solved
-        return true; //system fully solved
+
+        //system fully solved
+        _Solved = true;
+        return true;
     }
 
 //------------------------------------------------------------------------------
