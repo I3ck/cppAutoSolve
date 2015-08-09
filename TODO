@@ -1,1 +1,23 @@
-write an actual TODO
+use a controller which takes away all the abstraction levels
+
+Controller.add_function_node()
+...paranode
+
+Controller.add(paranode)
+Controller.add(functionNode)
+
+Controller.connect_function_with_input(id1, id2)
+Controller.connect_function_with_ouput(id1, id2)
+
+
+bool Controller.solve_system()
+
+
+Controller has many sets
+
+set<string>
+    uncalculatedParameters
+    uncalculatedFunctions
+
+    calculatedP
+    calculatedF
