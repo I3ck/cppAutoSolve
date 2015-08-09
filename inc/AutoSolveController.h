@@ -156,6 +156,11 @@ private:
                 return false; //all uncalculated parameters have to be valid
         }
 
+        for(auto calculatedP : _KnownParameters) {
+            if(!calculatedP->is_valid())
+                return false; //all calculated parameters have to be valid
+        }
+
         for(auto uncalculatedF : _UncalculateAbleFunction) {
             if(!uncalculatedF->is_valid())
                 return false; //all uncalculated functions have to be valid

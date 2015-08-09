@@ -52,6 +52,8 @@ public:
 protected:
 
     bool is_valid() {
+        if(_Known)
+            return true;
         if(_InputFunctionNodes.size() == 0)
             return false;
         return true;
