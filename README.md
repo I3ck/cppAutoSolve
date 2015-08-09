@@ -4,7 +4,7 @@ This enables you to define and solve any system of equations, linear or not.
 
 
 
-##version 0.1.2
+##version 0.1.3
 
 ##solve any system
 define your functions by deriving from `FunctionNode` and implementing your own `calc()` method:
@@ -14,8 +14,8 @@ class YourFunction1 : public FunctionNode<T> {
 public:
     //define the function itself here
     //acess the parameters by name and return the result of the function
-    T calc() {
-        return (FunctionNode<T>::_InputParameterNodes)["x"]->get() * (FunctionNode<T>::_InputParameterNodes)["y"]->get();
+    T calc(std::map<std::string, ParameterNode<T>*> &inputs) const {
+        return inputs["x"]->get() * inputs["y"]->get();
     }
 };
 ```

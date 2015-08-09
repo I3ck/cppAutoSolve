@@ -43,7 +43,7 @@ protected:
     virtual void solve() {
         if(can_be_calculated() && !_Calculated) {
             _Calculated = true;
-            _ResultParameterNode->_Val = calc();
+            _ResultParameterNode->_Val = calc(_InputParameterNodes);
             _ResultParameterNode->_Known = true;
         }
     }
@@ -59,7 +59,7 @@ protected:
         paraNode->_InputFunctionNodes.insert(this);
     }
 
-    virtual T calc() = 0;
+    virtual T calc(std::map<std::string, ParameterNode<T>*> &inputs) const = 0;
 
 //------------------------------------------------------------------------------
 

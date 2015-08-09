@@ -10,24 +10,24 @@ using namespace std;
 template <typename T>
 class FN1 : public FunctionNode<T> {
 public:
-    T calc() {
-        return (FunctionNode<T>::_InputParameterNodes)["x"]->get() * (FunctionNode<T>::_InputParameterNodes)["y"]->get();
+    T calc(std::map<std::string, ParameterNode<T>*> &inputs) const {
+        return inputs["x"]->get() * inputs["y"]->get();
     }
 };
 
 template <typename T>
 class FN2 : public FunctionNode<T> {
 public:
-    T calc() {
-        return 18.0 * (FunctionNode<T>::_InputParameterNodes)["y"]->get();
+    T calc(std::map<std::string, ParameterNode<T>*> &inputs) const {
+        return 18.0 * inputs["y"]->get();
     }
 };
 
 template <typename T>
 class FN3 : public FunctionNode<T> {
 public:
-    T calc() {
-        return (FunctionNode<T>::_InputParameterNodes)["x"]->get() * (FunctionNode<T>::_InputParameterNodes)["y"]->get() + (FunctionNode<T>::_InputParameterNodes)["z"]->get();
+    T calc(std::map<std::string, ParameterNode<T>*> &inputs) const {
+        return inputs["x"]->get() * inputs["y"]->get() + inputs["z"]->get();
     }
 };
 
