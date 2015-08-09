@@ -5,3 +5,5 @@ write some examples
 add more tests for known systems
 
 possible to make inheritance of function node easier?
+
+do functions need the identifier?
