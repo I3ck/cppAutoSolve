@@ -89,7 +89,7 @@ public:
                 bool allCalculated(true);
 
                 //check whether all inputs for this function are known
-                for(auto input : func.second->_NodesParaInput) {
+                for(auto input : func->_NodesParaInput) {
                     if(!input.second->_Calculated) {
                         allCalculated = false;
                         break;
@@ -98,7 +98,7 @@ public:
                 //add to todo if it can be solved
                 ///@todo renamed container to solveable functions and other to solved functions
                 if(allCalculated)
-                    _ToBeCalculatedFunctions.insert(func.second);
+                    _ToBeCalculatedFunctions.insert(func);
             }
         }
 
@@ -127,14 +127,14 @@ public:
             for(auto func : todoF->_NodeParaResult->_NodesFuncOutput) {
                 //check whether they can be calculated
                 bool allCalculated(true);
-                for(auto input : func.second->_NodesParaInput) {
+                for(auto input : func->_NodesParaInput) {
                     if(!input.second->_Calculated) {
                         allCalculated = false;
                         break;
                     }
                 }
                 if(allCalculated) //if they can be calculated, add them to the todo
-                    _ToBeCalculatedFunctions.insert(func.second);
+                    _ToBeCalculatedFunctions.insert(func);
             }
         }
 

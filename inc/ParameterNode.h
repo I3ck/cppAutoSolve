@@ -3,7 +3,7 @@
 
 #include "../cppAutoSolve.h"
 
-#include <map>
+#include <set>
 
 template <typename T>
 class FunctionNode;
@@ -20,7 +20,7 @@ class ParameterNode {
 
 //------------------------------------------------------------------------------
 protected:
-    std::map<std::string, FunctionNode<T>*>
+    std::set<FunctionNode<T>*>
         _NodesFuncInput,
         _NodesFuncOutput;
 

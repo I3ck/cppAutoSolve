@@ -55,11 +55,11 @@ protected:
 
     void connect_with_input(ParameterNode<T>* paraNode) {
         _NodesParaInput[paraNode->_Identifier] = paraNode;
-        paraNode->_NodesFuncOutput[_Identifier] = this;
+        paraNode->_NodesFuncOutput.insert(this);
     }
     void connect_with_output(ParameterNode<T>* paraNode) {
         _NodeParaResult = paraNode;
-        paraNode->_NodesFuncInput[_Identifier] = this;
+        paraNode->_NodesFuncInput.insert(this);
     }
 
     virtual T calc() = 0;
