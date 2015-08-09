@@ -4,6 +4,7 @@
 #include "../cppAutoSolve.h"
 
 #include <set>
+#include <queue>
 #include <stdexcept>
 
 //------------------------------------------------------------------------------
@@ -11,13 +12,14 @@
 template <typename T>
 class AutoSolveController {
 private:
-    ///@todo do all containers have to be searchable?
     std::set<ParameterNode<T>*>
         _UncalculatedParameters, //all the parameter nodes, of which the value is unknown
         _CalculatedParameters; //all the parameter nodes, of which the value is known
 
     std::set<FunctionNode<T>*>
-        _UncalculatedFunctions, //functions which were never called
+        _UncalculatedFunctions; //functions which were never called
+
+    std::queue<FunctionNode<T>*>
         _ToBeCalculatedFunctions; //functions which have to be used
 
 //------------------------------------------------------------------------------
@@ -98,16 +100,15 @@ public:
                 //add to todo if it can be solved
                 ///@todo renamed container to solveable functions and other to solved functions
                 if(allCalculated)
-                    _ToBeCalculatedFunctions.insert(func);
+                    _ToBeCalculatedFunctions.push(func);
             }
         }
 
         //while there still are functions that can be solved
         while(_ToBeCalculatedFunctions.size() > 0) {
             //get a new function which can be solved
-            auto todo = _ToBeCalculatedFunctions.begin();
-            auto todoF = *todo;
-            _ToBeCalculatedFunctions.erase(todo);
+            FunctionNode<T> *todoF = _ToBeCalculatedFunctions.front();
+            _ToBeCalculatedFunctions.pop();
 
             //make sure it is fine and can be solved
             if(!todoF->is_valid())
@@ -134,7 +135,7 @@ public:
                     }
                 }
                 if(allCalculated) //if they can be calculated, add them to the todo
-                    _ToBeCalculatedFunctions.insert(func);
+                    _ToBeCalculatedFunctions.push(func);
             }
         }
 
