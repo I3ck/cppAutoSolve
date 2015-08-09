@@ -19,7 +19,6 @@ class ParameterNode {
     friend class AutoSolveController<T>;
 
 //------------------------------------------------------------------------------
-
 protected:
     std::map<std::string, FunctionNode<T>*>
         _NodesFuncInput,
@@ -32,15 +31,6 @@ protected:
     T _Val;
 
 //------------------------------------------------------------------------------
-
-    bool is_valid() {
-        if(_NodesFuncInput.size() == 0)
-            return false;
-        return true;
-    }
-
-//------------------------------------------------------------------------------
-
 public:
     ParameterNode(const std::string& identifier) :
         _Identifier(identifier),
@@ -57,6 +47,18 @@ public:
     T get_val() const {
         return _Val;
     }
+
+//------------------------------------------------------------------------------
+protected:
+
+    bool is_valid() {
+        if(_NodesFuncInput.size() == 0)
+            return false;
+        return true;
+    }
+
+//------------------------------------------------------------------------------
+
 };
 
 #endif //PARAMETER_NODE_H_INCLUDED

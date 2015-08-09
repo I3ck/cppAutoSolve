@@ -21,31 +21,6 @@ private:
         _ToBeCalculatedFunctions; //functions which have to be used
 
 //------------------------------------------------------------------------------
-
-    bool system_is_valid() { //checking whether the initial state of the system is fine
-        if(_UncalculatedParameters.size() == 0 || _UncalculatedFunctions.size() == 0)
-            return false; //nothing to do in this case
-
-        for(auto uncalculatedP : _UncalculatedParameters) {
-            if(!uncalculatedP->is_valid())
-                return false; //all uncalculated parameters have to be valid
-        }
-
-        for(auto calculatedP : _CalculatedParameters) {
-            if(!CalculatedP->is_valid())
-                return false; //all calculated parameters have to be valid
-        }
-
-        for(auto uncalculatedF : _UncalculatedFunctions) {
-            if(!uncalculatedF->is_valid())
-                return false; //all uncalculated functions have to be valid
-        }
-
-        return true; //all checks passed
-    }
-
-//------------------------------------------------------------------------------
-
 public:
 
     //add a parameter node to the system
@@ -58,7 +33,7 @@ public:
 
     //add a function node to the system
     void add(FunctionNode<T>* fNode) {
-        if(fNode->_Calulated) //all function nodes should be uncalculated in the beginning
+        if(fNode->_Calculated) //all function nodes should be uncalculated in the beginning
             throw std::runtime_error("Do not add already calculated function nodes");
         _UncalculatedFunctions.insert(fNode);
     }
@@ -141,7 +116,7 @@ public:
             todoF->solve(); //solve the function
 
             _CalculatedParameters.insert(todoF->_NodeParaResult); //add its output to known parameters
-            if(_UncalculatedParameters.find(todoF->_NodeParaResult) != _UncalculatedParameters.end(); //and remove it from the unknown parameters
+            if(_UncalculatedParameters.find(todoF->_NodeParaResult) != _UncalculatedParameters.end()) //and remove it from the unknown parameters
                 _UncalculatedParameters.erase(_UncalculatedParameters.find(todoF->_NodeParaResult));
 
             //now check whether the now known output parameter
@@ -167,6 +142,34 @@ public:
             return false; //system could not be fully solved
         return true; //system fully solved
     }
+
+//------------------------------------------------------------------------------
+private:
+
+    bool system_is_valid() { //checking whether the initial state of the system is fine
+        if(_UncalculatedParameters.size() == 0 || _UncalculatedFunctions.size() == 0)
+            return false; //nothing to do in this case
+
+        for(auto uncalculatedP : _UncalculatedParameters) {
+            if(!uncalculatedP->is_valid())
+                return false; //all uncalculated parameters have to be valid
+        }
+
+        for(auto calculatedP : _CalculatedParameters) {
+            if(!calculatedP->is_valid())
+                return false; //all calculated parameters have to be valid
+        }
+
+        for(auto uncalculatedF : _UncalculatedFunctions) {
+            if(!uncalculatedF->is_valid())
+                return false; //all uncalculated functions have to be valid
+        }
+
+        return true; //all checks passed
+    }
+
+//------------------------------------------------------------------------------
+
 };
 
 #endif //AUTO_SOLVE_CONTROLLER_H_INCLUDED

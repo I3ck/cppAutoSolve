@@ -51,6 +51,18 @@ public:
 
 //------------------------------------------------------------------------------
 
+    void connect_with_input(ParameterNode<T>* paraNode) {
+        _NodesParaInput[paraNode->_Identifier] = paraNode;
+        paraNode->_NodesFuncOutput[_Identifier] = this;
+    }
+    void connect_with_output(ParameterNode<T>* paraNode) {
+        _NodeParaResult = paraNode;
+        paraNode->_NodesFuncInput[_Identifier] = this;
+    }
+};
+
+//------------------------------------------------------------------------------
+
 protected:
     virtual T calc() = 0;
 
@@ -75,16 +87,5 @@ protected:
     }
 
 //------------------------------------------------------------------------------
-
-public:
-    void connect_with_input(ParameterNode<T>* paraNode) {
-        _NodesParaInput[paraNode->_Identifier] = paraNode;
-        paraNode->_NodesFuncOutput[_Identifier] = this;
-    }
-    void connect_with_output(ParameterNode<T>* paraNode) {
-        _NodeParaResult = paraNode;
-        paraNode->_NodesFuncInput[_Identifier] = this;
-    }
-};
 
 #endif //FUNCTION_NODE_H_INCLUDED
