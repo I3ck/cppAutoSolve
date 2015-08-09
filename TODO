@@ -4,6 +4,6 @@ write README
 
 write some examples
 
-add more tests for known systems (current test only prints the result)
+add more tests for known systems
 
 possible to make inheritance of function node easier?

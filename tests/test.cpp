@@ -68,11 +68,9 @@ TEST_CASE("first case") {
     controller.connect_function_with_input(&fn3, &z);
     controller.connect_function_with_output(&fn3, &a);
 
-    if(controller.solve()) {
-
-        cout << "x : " << x.get_val() << endl;
-        cout << "y : " << y.get_val() << endl;
-        cout << "z : " << z.get_val() << endl;
-        cout << "a : " << a.get_val() << endl;
-    }
+    REQUIRE(controller.solve());
+    REQUIRE(x.get_val() == 135.0);
+    REQUIRE(y.get_val() == 7.5);
+    REQUIRE(z.get_val() == 1012.5);
+    REQUIRE(a.get_val() == 2025.0);
 }
