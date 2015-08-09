@@ -21,12 +21,12 @@ class ParameterNode {
 //------------------------------------------------------------------------------
 protected:
     std::set<FunctionNode<T>*>
-        _NodesFuncInput,
-        _NodesFuncOutput;
+        _InputFunctionNodes,
+        _OutputFunctionNodes;
 
     std::string _Identifier;
 
-    bool _Calculated;
+    bool _Known;
 
     T _Val;
 
@@ -34,14 +34,14 @@ protected:
 public:
     ParameterNode(const std::string& identifier) :
         _Identifier(identifier),
-        _Calculated(false)
+        _Known(false)
     {}
 
 //------------------------------------------------------------------------------
 
     void set_val(T val) {
         _Val = val;
-        _Calculated = true;
+        _Known = true;
     }
 
     T get_val() const {
@@ -52,7 +52,7 @@ public:
 protected:
 
     bool is_valid() {
-        if(_NodesFuncInput.size() == 0)
+        if(_InputFunctionNodes.size() == 0)
             return false;
         return true;
     }

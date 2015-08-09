@@ -13,7 +13,7 @@ public:
     FN1(const std::string& id) : FunctionNode<T>(id) {}
 
     T calc() {
-        return (FunctionNode<T>::_NodesParaInput)["x"]->get_val() * (FunctionNode<T>::_NodesParaInput)["y"]->get_val();
+        return (FunctionNode<T>::_InputParameterNodes)["x"]->get_val() * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val();
     }
 };
 
@@ -23,7 +23,7 @@ public:
     FN2(const std::string& id) : FunctionNode<T>(id) {}
 
     T calc() {
-        return 18.0 * (FunctionNode<T>::_NodesParaInput)["y"]->get_val();
+        return 18.0 * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val();
     }
 };
 
@@ -33,7 +33,7 @@ public:
     FN3(const std::string& id) : FunctionNode<T>(id) {}
 
     T calc() {
-        return (FunctionNode<T>::_NodesParaInput)["x"]->get_val() * (FunctionNode<T>::_NodesParaInput)["y"]->get_val() + (FunctionNode<T>::_NodesParaInput)["z"]->get_val();
+        return (FunctionNode<T>::_InputParameterNodes)["x"]->get_val() * (FunctionNode<T>::_InputParameterNodes)["y"]->get_val() + (FunctionNode<T>::_InputParameterNodes)["z"]->get_val();
     }
 };
 

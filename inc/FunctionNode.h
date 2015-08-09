@@ -21,10 +21,10 @@ class FunctionNode {
 //------------------------------------------------------------------------------
 
 protected:
-    ParameterNode<T>* _NodeParaResult;
+    ParameterNode<T>* _ResultParameterNode;
 
     std::map<std::string, ParameterNode<T>*>
-        _NodesParaInput;
+        _InputParameterNodes;
 
     std::string _Identifier;
 
@@ -34,7 +34,7 @@ protected:
 
 public:
     FunctionNode(const std::string& identifier) :
-        _NodeParaResult(nullptr),
+        _ResultParameterNode(nullptr),
         _Identifier(identifier),
         _Calculated(false)
     {}
@@ -46,20 +46,20 @@ protected:
     virtual void solve() {
         if(can_be_calculated() && !_Calculated) {
             _Calculated = true;
-            _NodeParaResult->_Val = calc();
-            _NodeParaResult->_Calculated = true;
+            _ResultParameterNode->_Val = calc();
+            _ResultParameterNode->_Known = true;
         }
     }
 
 //------------------------------------------------------------------------------
 
     void connect_with_input(ParameterNode<T>* paraNode) {
-        _NodesParaInput[paraNode->_Identifier] = paraNode;
-        paraNode->_NodesFuncOutput.insert(this);
+        _InputParameterNodes[paraNode->_Identifier] = paraNode;
+        paraNode->_OutputFunctionNodes.insert(this);
     }
     void connect_with_output(ParameterNode<T>* paraNode) {
-        _NodeParaResult = paraNode;
-        paraNode->_NodesFuncInput.insert(this);
+        _ResultParameterNode = paraNode;
+        paraNode->_InputFunctionNodes.insert(this);
     }
 
     virtual T calc() = 0;
@@ -67,8 +67,8 @@ protected:
 //------------------------------------------------------------------------------
 
     bool can_be_calculated() {
-        for(auto i : _NodesParaInput) {
-            if (!i.second->_Calculated)
+        for(auto i : _InputParameterNodes) {
+            if (!i.second->_Known)
                 return false;
         }
         return true;
@@ -77,9 +77,9 @@ protected:
 //------------------------------------------------------------------------------
 
     bool is_valid() {
-        if(_NodeParaResult == nullptr)
+        if(_ResultParameterNode == nullptr)
             return false;
-        if(_NodesParaInput.size() == 0)
+        if(_InputParameterNodes.size() == 0)
             return false;
         return true;
     }

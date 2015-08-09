@@ -27,7 +27,7 @@ public:
 
     //add a parameter node to the system
     void add(ParameterNode<T>* pNode) {
-        if(pNode->_Calculated) //if already calculated, insert to calculated set
+        if(pNode->_Known) //if already calculated, insert to calculated set
             _KnownParameters.insert(pNode);
         else //else insert to uncalculated set
             _UnknownParameters.insert(pNode);
@@ -84,15 +84,15 @@ public:
         for(auto calculatedP : _KnownParameters) {
 
             //find the function they're used as parameter in
-            for(auto func : calculatedP->_NodesFuncOutput) {
+            for(auto func : calculatedP->_OutputFunctionNodes) {
 
                 //check whether these functions can be calculated
                 ///@todo make this a method (or use existing one)
                 bool allCalculated(true);
 
                 //check whether all inputs for this function are known
-                for(auto input : func->_NodesParaInput) {
-                    if(!input.second->_Calculated) {
+                for(auto input : func->_InputParameterNodes) {
+                    if(!input.second->_Known) {
                         allCalculated = false;
                         break;
                     }
@@ -116,20 +116,20 @@ public:
 
             todoF->solve(); //solve the function
 
-            _KnownParameters.insert(todoF->_NodeParaResult); //add its output to known parameters
-            if(_UnknownParameters.find(todoF->_NodeParaResult) != _UnknownParameters.end()) //and remove it from the unknown parameters
-                _UnknownParameters.erase(_UnknownParameters.find(todoF->_NodeParaResult));
+            _KnownParameters.insert(todoF->_ResultParameterNode); //add its output to known parameters
+            if(_UnknownParameters.find(todoF->_ResultParameterNode) != _UnknownParameters.end()) //and remove it from the unknown parameters
+                _UnknownParameters.erase(_UnknownParameters.find(todoF->_ResultParameterNode));
 
             //now check whether the now known output parameter
             //can be used to solve any of its functions
             ///@todo same code as above, except the first line (make method?)
 
             //for all the functions this parameter is used in
-            for(auto func : todoF->_NodeParaResult->_NodesFuncOutput) {
+            for(auto func : todoF->_ResultParameterNode->_OutputFunctionNodes) {
                 //check whether they can be calculated
                 bool allCalculated(true);
-                for(auto input : func->_NodesParaInput) {
-                    if(!input.second->_Calculated) {
+                for(auto input : func->_InputParameterNodes) {
+                    if(!input.second->_Known) {
                         allCalculated = false;
                         break;
                     }
