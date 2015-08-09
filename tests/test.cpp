@@ -53,6 +53,7 @@ TEST_CASE("first case") {
     controller.add(&x);
     controller.add(&y);
     controller.add(&z);
+    controller.add(&a);
 
     controller.connect_function_with_input(&fn1, &x);
     controller.connect_function_with_input(&fn1, &y);

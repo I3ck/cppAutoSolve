@@ -79,11 +79,12 @@ public:
         //if all children of it are defined, move it from uncalculated to todo
         //if todo is empty, break
 
-        #ifdef DEBUG
-            cout << "TO BE CALCULATED: " << _ToBeCalculatedFunctions.size() << endl;
-        #endif
+
 
         while(_ToBeCalculatedFunctions.size() > 0) { ///@todo warning, possible endless loop
+            #ifdef DEBUG
+                cout << "TO BE CALCULATED: " << _ToBeCalculatedFunctions.size() << endl;
+            #endif
             auto todo = _ToBeCalculatedFunctions.begin();
             auto todoF = *todo;
             _ToBeCalculatedFunctions.erase(todo);
@@ -99,9 +100,15 @@ public:
 
             ///@todo same code as above, except the first line
             for(auto func : todoF->_NodeParaResult->_NodesFuncOutput) {
+                #ifdef DEBUG
+                    cout << "FUNCTION IN TODO" << endl;
+                #endif
                 ///@todo only if function not in calculated
                 bool allCalculated(true);
                 for(auto input : func.second->_NodesParaInput) {
+                    #ifdef DEBUG
+                        cout << "CHECKING INPUTS" << endl;
+                    #endif
                     if(!input.second->_Calculated) {
                         allCalculated = false;
                         break;
@@ -114,6 +121,7 @@ public:
         //while functions in todo
         //calculate their parameters
         //move calculated parameters to calculated group
+        return true; ///@todo return false, if there still are uncalculated parameters
     }
 
 
