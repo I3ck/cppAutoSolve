@@ -7,34 +7,21 @@ using namespace std;
 
 #include "../cppAutoSolve.h"
 
-template <typename T>
-class FN1 : public FunctionNode<T> {
-public:
-    T calc(std::map<std::string, ParameterNode<T>*> &inputs) const {
-        return inputs["x"]->get() * inputs["y"]->get();
-    }
-};
+double f1(std::map<std::string, ParameterNode<double>*> &inputs) {
+    return inputs["x"]->get() * inputs["y"]->get();
+}
 
-template <typename T>
-class FN2 : public FunctionNode<T> {
-public:
-    T calc(std::map<std::string, ParameterNode<T>*> &inputs) const {
-        return 18.0 * inputs["y"]->get();
-    }
-};
-
-template <typename T>
-class FN3 : public FunctionNode<T> {
-public:
-    T calc(std::map<std::string, ParameterNode<T>*> &inputs) const {
-        return inputs["x"]->get() * inputs["y"]->get() + inputs["z"]->get();
-    }
-};
 
 TEST_CASE("first case") {
-    FN1<double> fn1;
-    FN2<double> fn2;
-    FN3<double> fn3;
+
+    FunctionNode<double> fn1(f1);
+    FunctionNode<double> fn2([](std::map<std::string, ParameterNode<double>*> &inputs) {
+        return 18.0 * inputs["y"]->get();
+    });
+    FunctionNode<double> fn3([](std::map<std::string, ParameterNode<double>*> &inputs) {
+            return inputs["x"]->get() * inputs["y"]->get() + inputs["z"]->get();
+    });
+
     ParameterNode<double>
         x("x"), y("y"), z("z"), a("a");
 

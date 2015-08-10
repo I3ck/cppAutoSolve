@@ -28,12 +28,15 @@ protected:
 
     bool _Calculated;
 
+    std::function<T (std::map<std::string, ParameterNode<T>*>&)> _Callback;
+
 //------------------------------------------------------------------------------
 
 public:
-    FunctionNode() :
+    FunctionNode(std::function<T (std::map<std::string, ParameterNode<T>*>&)> callback) :
         _ResultParameterNode(nullptr),
-        _Calculated(false)
+        _Calculated(false),
+        _Callback(callback)
     {}
 
 //------------------------------------------------------------------------------
@@ -43,7 +46,7 @@ protected:
     virtual void solve() {
         if(can_be_calculated() && !_Calculated) {
             _Calculated = true;
-            _ResultParameterNode->_Val = calc(_InputParameterNodes);
+            _ResultParameterNode->_Val = _Callback(_InputParameterNodes);
             _ResultParameterNode->_Known = true;
         }
     }
@@ -58,8 +61,6 @@ protected:
         _ResultParameterNode = paraNode;
         paraNode->_InputFunctionNodes.insert(this);
     }
-
-    virtual T calc(std::map<std::string, ParameterNode<T>*> &inputs) const = 0;
 
 //------------------------------------------------------------------------------
 

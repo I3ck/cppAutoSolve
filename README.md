@@ -4,27 +4,24 @@ This enables you to define and solve any system of equations, linear or not.
 
 
 
-##version 0.1.3
+##version 0.2
 
 ##solve any system
-define your functions by deriving from `FunctionNode` and implementing your own `calc()` method:
+Define your functions and pass them to the `FunctionNode` constructor, or directly use lambda expressions:  
 ```cpp
-template <typename T>
-class YourFunction1 : public FunctionNode<T> {
-public:
-    //define the function itself here
-    //acess the parameters by name and return the result of the function
-    T calc(std::map<std::string, ParameterNode<T>*> &inputs) const {
-        return inputs["x"]->get() * inputs["y"]->get();
-    }
-};
+//using a callback function
+double f1(std::map<std::string, ParameterNode<double>*> &inputs) {
+    return inputs["x"]->get() * inputs["y"]->get();
+}
+FunctionNode<double> fn1(f1);
+
+
+//directly using a lambda expression
+FunctionNode<double> fn2([](std::map<std::string, ParameterNode<double>*> &inputs) {
+    return 18.0 * inputs["y"]->get();
+});
 ```
-After defining your `FunctionNodes`, instantiate them:
-```cpp
-YourFunction1<double> fn1;
-YourFunction2<double> fn2;
-...
-```
+
 
 Then define your parameters by creating `ParameterNodes` with the name as identifier:
 ```cpp
