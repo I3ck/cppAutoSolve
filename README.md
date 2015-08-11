@@ -78,3 +78,6 @@ directly include `cppAutoSolve.h` which includes all required headers or choose 
 
 #contribute
 feel free to open issues if you'd like to have new algorithms added, would like to have a new feature or found a bug
+
+#license
+LGPL V3, see `LICENSE`
