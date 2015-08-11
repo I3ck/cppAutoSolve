@@ -51,6 +51,11 @@ public:
     {}
 
     //add a parameter node to the system
+    template <typename Arg, typename ... Args>
+    void add(Arg val, Args... args) {
+        add(val);
+        add(args ...);
+    }
     void add(ParameterNode<T>* pNode) {
         if(pNode->_Known) //if already known, insert to known set
             _KnownParameters.insert(pNode);

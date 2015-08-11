@@ -4,7 +4,7 @@ This enables you to define and solve any system of equations, linear or not.
 
 
 
-##version 0.3
+##version 0.4
 
 ##solve any system
 Define your functions and pass them to the `FunctionNode` constructor, or directly use lambda expressions:  
@@ -41,10 +41,8 @@ AutoSolveController<double> controller;
 
 Add all the `ParameterNodes` and `FunctionNodes` to your equation system by adding to the controller:
 ```cpp
-controller.add(&fn1);
-controller.add(&fn2);
-controller.add(&fn3);
-controller.add(&x);
+controller.add(&fn1, &fn2, &fn3 ,
+               &x, &y, &z);
 ...
 ```
 

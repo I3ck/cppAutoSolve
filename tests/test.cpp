@@ -29,13 +29,8 @@ TEST_CASE("first case") {
 
     AutoSolveController<double> controller;
 
-    controller.add(&fn1);
-    controller.add(&fn2);
-    controller.add(&fn3);
-    controller.add(&x);
-    controller.add(&y);
-    controller.add(&z);
-    controller.add(&a);
+    controller.add(&fn1, &fn2, &fn3 ,
+                   &x, &y, &z, &a);
 
     controller.connect_input(&fn1, &x);
     controller.connect_input(&fn1, &y);
