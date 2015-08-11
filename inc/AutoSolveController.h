@@ -50,19 +50,20 @@ public:
         _Solved(false)
     {}
 
-    //add a parameter node to the system
+    //variadic function to add any nodes
     template <typename Arg, typename ... Args>
     void add(Arg val, Args... args) {
         add(val);
         add(args ...);
     }
+
+    //add a parameter node to the system
     void add(ParameterNode<T>* pNode) {
         if(pNode->_Known) //if already known, insert to known set
             _KnownParameters.insert(pNode);
         else //else insert to unknown set
             _UnknownParameters.insert(pNode);
     }
-
     //add a function node to the system
     void add(FunctionNode<T>* fNode) {
         if(fNode->_Calculated) //all function nodes should be uncalculated in the beginning
