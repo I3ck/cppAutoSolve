@@ -51,10 +51,10 @@ public:
     {}
 
     //variadic function to add any nodes
-    template <typename Arg, typename ... Args>
-    void add(Arg val, Args... args) {
-        add(val);
-        add(args ...);
+    template <typename Node, typename ... Nodes>
+    void add(Node node, Nodes... nodes) {
+        add(node);
+        add(nodes ...);
     }
 
     //add a parameter node to the system
@@ -64,6 +64,7 @@ public:
         else //else insert to unknown set
             _UnknownParameters.insert(pNode);
     }
+
     //add a function node to the system
     void add(FunctionNode<T>* fNode) {
         if(fNode->_Calculated) //all function nodes should be uncalculated in the beginning
@@ -73,8 +74,15 @@ public:
 
 //------------------------------------------------------------------------------
 
+    //variadic function to connect many inputs
+    template <typename FNode, typename PNode, typename ... PNodes>
+    void connect_inputs(FNode fNode, PNode pNode, PNodes... pNodes) {
+        connect_inputs(fNode, pNode);
+        connect_inputs(fNode, pNodes ...);
+    }
+
     //define connections between function- and parameter nodes
-    void connect_input(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
+    void connect_inputs(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
         if(_UncalculateableFunctions.find(fNode) == _UncalculateableFunctions.end()) //only allow connections to added nodes
             throw std::runtime_error("Function node you are trying to connect not added yet. Make sure to add THEN connect");
 

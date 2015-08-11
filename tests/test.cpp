@@ -32,16 +32,13 @@ TEST_CASE("first case") {
     controller.add(&fn1, &fn2, &fn3 ,
                    &x, &y, &z, &a);
 
-    controller.connect_input(&fn1, &x);
-    controller.connect_input(&fn1, &y);
+    controller.connect_inputs(&fn1, &x, &y);
     controller.connect_output(&fn1, &z);
 
-    controller.connect_input(&fn2, &y);
+    controller.connect_inputs(&fn2, &y);
     controller.connect_output(&fn2, &x);
 
-    controller.connect_input(&fn3, &x);
-    controller.connect_input(&fn3, &y);
-    controller.connect_input(&fn3, &z);
+    controller.connect_inputs(&fn3, &x, &y, &z);
     controller.connect_output(&fn3, &a);
 
     REQUIRE(controller.solve());
