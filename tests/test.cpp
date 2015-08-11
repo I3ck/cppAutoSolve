@@ -37,17 +37,17 @@ TEST_CASE("first case") {
     controller.add(&z);
     controller.add(&a);
 
-    controller.connect_function_with_input(&fn1, &x);
-    controller.connect_function_with_input(&fn1, &y);
-    controller.connect_function_with_output(&fn1, &z);
+    controller.connect_input(&fn1, &x);
+    controller.connect_input(&fn1, &y);
+    controller.connect_output(&fn1, &z);
 
-    controller.connect_function_with_input(&fn2, &y);
-    controller.connect_function_with_output(&fn2, &x);
+    controller.connect_input(&fn2, &y);
+    controller.connect_output(&fn2, &x);
 
-    controller.connect_function_with_input(&fn3, &x);
-    controller.connect_function_with_input(&fn3, &y);
-    controller.connect_function_with_input(&fn3, &z);
-    controller.connect_function_with_output(&fn3, &a);
+    controller.connect_input(&fn3, &x);
+    controller.connect_input(&fn3, &y);
+    controller.connect_input(&fn3, &z);
+    controller.connect_output(&fn3, &a);
 
     REQUIRE(controller.solve());
     REQUIRE(x.get() == 135.0);

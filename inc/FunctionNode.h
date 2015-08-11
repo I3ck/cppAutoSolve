@@ -72,11 +72,11 @@ protected:
 
 //------------------------------------------------------------------------------
 
-    void connect_with_input(ParameterNode<T>* paraNode) {
+    void connect_input(ParameterNode<T>* paraNode) {
         _InputParameterNodes[paraNode->_Identifier] = paraNode;
         paraNode->_OutputFunctionNodes.insert(this);
     }
-    void connect_with_output(ParameterNode<T>* paraNode) {
+    void connect_output(ParameterNode<T>* paraNode) {
         _ResultParameterNode = paraNode;
         paraNode->_InputFunctionNodes.insert(this);
     }

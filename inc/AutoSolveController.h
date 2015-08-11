@@ -68,7 +68,7 @@ public:
 //------------------------------------------------------------------------------
 
     //define connections between function- and parameter nodes
-    void connect_function_with_input(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
+    void connect_input(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
         if(_UncalculateableFunctions.find(fNode) == _UncalculateableFunctions.end()) //only allow connections to added nodes
             throw std::runtime_error("Function node you are trying to connect not added yet. Make sure to add THEN connect");
 
@@ -76,11 +76,11 @@ public:
             && _KnownParameters.find(pNode) == _KnownParameters.end()) //only allow connections to added nodes
             throw std::runtime_error("Parameter node you are trying to connect not added yet. Make sure to add THEN connect");
 
-        fNode->connect_with_input(pNode);
+        fNode->connect_input(pNode);
     }
 
     //define connections between function- and parameter nodes
-    void connect_function_with_output(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
+    void connect_output(FunctionNode<T>* fNode, ParameterNode<T>* pNode) {
         if(_UncalculateableFunctions.find(fNode) == _UncalculateableFunctions.end()) //only allow connections to added nodes
             throw std::runtime_error("Function node you are trying to connect not added yet. Make sure to add THEN connect");
 
@@ -88,7 +88,7 @@ public:
             && _KnownParameters.find(pNode) == _KnownParameters.end()) //only allow connections to added nodes
             throw std::runtime_error("Parameter node you are trying to connect not added yet. Make sure to add THEN connect");
 
-        fNode->connect_with_output(pNode);
+        fNode->connect_output(pNode);
     }
 
 //------------------------------------------------------------------------------

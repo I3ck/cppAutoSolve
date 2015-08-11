@@ -4,7 +4,7 @@ This enables you to define and solve any system of equations, linear or not.
 
 
 
-##version 0.2
+##version 0.3
 
 ##solve any system
 Define your functions and pass them to the `FunctionNode` constructor, or directly use lambda expressions:  
@@ -54,11 +54,11 @@ Connect functions with their input and output parameters.
 `e` is output of `f1`  
 `x`,`y` and`z` inputs of `f1`
 ```cpp
-controller.connect_function_with_input(&f1, &x);
-controller.connect_function_with_input(&f1, &y);
-controller.connect_function_with_input(&f1, &z);
+controller.connect_input(&f1, &x);
+controller.connect_input(&f1, &y);
+controller.connect_input(&f1, &z);
 
-controller.connect_function_with_output(&f1, &e);
+controller.connect_output(&f1, &e);
 ```
 
 Once all connections are defined, you can start solving the system:
