@@ -26,6 +26,7 @@ along with cppAutoSolve.  If not, see <http://www.gnu.org/licenses/>.
 #include <queue>
 #include <stdexcept>
 #include <sstream>
+#include <string>
 
 //------------------------------------------------------------------------------
 
