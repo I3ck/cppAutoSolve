@@ -42,6 +42,7 @@ TEST_CASE("first case") {
     controller.connect_output(&fn3, &a);
 
     REQUIRE(controller.solve());
+    std::cout << controller.results_text() << std::endl;
     REQUIRE(x.get() == 135.0);
     REQUIRE(y.get() == 7.5);
     REQUIRE(z.get() == 1012.5);

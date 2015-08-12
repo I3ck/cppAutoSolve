@@ -25,6 +25,7 @@ along with cppAutoSolve.  If not, see <http://www.gnu.org/licenses/>.
 #include <set>
 #include <queue>
 #include <stdexcept>
+#include <sstream>
 
 //------------------------------------------------------------------------------
 
@@ -166,6 +167,25 @@ public:
         return true;
     }
 
+//------------------------------------------------------------------------------
+
+    string results_text(const std::string delimiter = " : ",
+                        const std::string before = "",
+                        const std::string after = "\n",
+                        bool printUnknown = true,
+                        const std::string unknownVal = "NAN") const {
+        std::stringstream result("");
+
+        for(auto knownP : _KnownParameters)
+            result << before << knownP->_Identifier << delimiter << knownP->_Val << after;
+
+        if(printUnknown) {
+            for(auto unknownP : _UnknownParameters)
+                result << before << unknownP->_Identifier << delimiter << unknownVal << after;
+        }
+
+        return result.str();
+    }
 //------------------------------------------------------------------------------
 private:
 
