@@ -5,3 +5,5 @@ add more tests for known systems
 check whether a system is defined by too many parameters
 
 namespace the autosolver
+
+allow systems with invalid nodes? (no value set and no function pointing to them)?
