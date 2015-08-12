@@ -170,11 +170,11 @@ public:
 
 //------------------------------------------------------------------------------
 
-    string results_text(const std::string delimiter = " : ",
-                        const std::string before = "",
-                        const std::string after = "\n",
-                        bool printUnknown = true,
-                        const std::string unknownVal = "NAN") const {
+    std::string results_text(const std::string delimiter = " : ",
+                             const std::string before = "",
+                             const std::string after = "\n",
+                             bool printUnknown = true,
+                             const std::string unknownVal = "NAN") const {
         std::stringstream result("");
 
         for(auto knownP : _KnownParameters)
