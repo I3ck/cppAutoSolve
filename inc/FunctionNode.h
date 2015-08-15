@@ -88,6 +88,8 @@ protected:
             if (!i.second->_Known)
                 return false;
         }
+        if(_ResultParameterNode->_Known)
+            return false;
         return true;
     }
 
