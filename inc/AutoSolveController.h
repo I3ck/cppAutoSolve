@@ -115,9 +115,7 @@ public:
             return false; //don't try to solve an already solved system
 
         //make sure the system is valid before solving it
-        if(!system_is_valid()) {
-            return false;
-        }
+        check_validity();
 
         //for all initally set parameters
         //go the functions requiring them
@@ -190,26 +188,24 @@ public:
 //------------------------------------------------------------------------------
 private:
 
-    bool system_is_valid() { //checking whether the initial state of the system is fine
+    void check_validity() { //checking whether the initial state of the system is fine
         if(_UnknownParameters.size() == 0 || _UncalculateableFunctions.size() == 0)
-            return false; //nothing to do in this case
+            return; //nothing to do in this case
 
         for(auto unknownP : _UnknownParameters) {
             if(!unknownP->is_valid())
-                return false; //all unknown parameters have to be valid
+                throw std::runtime_error("'" + unknownP->_Identifier + "'" + " is not calculateable with any given function and its value is not set");
         }
 
         for(auto knownP : _KnownParameters) {
             if(!knownP->is_valid())
-                return false; //all known parameters have to be valid
+                throw std::runtime_error("'" + knownP->_Identifier + "'" + " is invalid. Unknown cause for this");
         }
 
         for(auto unknownF : _UncalculateableFunctions) {
             if(!unknownF->is_valid())
-                return false; //all unknown functions have to be valid
+                throw std::runtime_error("A function node has either no input or not output parameters");
         }
-
-        return true; //all checks passed
     }
 
 //------------------------------------------------------------------------------
