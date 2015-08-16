@@ -63,7 +63,7 @@ protected:
 
 //------------------------------------------------------------------------------
     virtual void solve() {
-        if(can_be_calculated() && !_Calculated) {
+        if(!_Calculated && can_be_calculated()) {
             _Calculated = true;
             _ResultParameterNode->_Val = _Callback(_InputParameterNodes);
             _ResultParameterNode->_Known = true;
