@@ -76,6 +76,14 @@ public:
     }
 
 //------------------------------------------------------------------------------
+
+    FunctionNode<T>& operator - (FunctionNode<T>& funcNode)
+    {
+        funcNode.connect_output(this);
+        return funcNode;
+    }
+
+//------------------------------------------------------------------------------
 protected:
 
     bool is_valid() {

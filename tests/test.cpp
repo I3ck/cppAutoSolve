@@ -32,8 +32,10 @@ TEST_CASE("first case") {
     controller.add(&fn1, &fn2, &fn3 ,
                    &x, &y, &z, &a);
 
-    controller.connect_inputs(&fn1, &x, &y);
-    controller.connect_output(&fn1, &z);
+    z - fn1 - x - y;
+    //or
+    //controller.connect_inputs(&fn1, &x, &y);
+    //controller.connect_output(&fn1, &z);
 
     controller.connect_inputs(&fn2, &y);
     controller.connect_output(&fn2, &x);

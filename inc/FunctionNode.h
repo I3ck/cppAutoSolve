@@ -105,6 +105,15 @@ protected:
 
 //------------------------------------------------------------------------------
 
+public:
+    FunctionNode& operator - (ParameterNode<T>& paraNode)
+    {
+        connect_input(&paraNode);
+        return *this;
+    }
+
+//------------------------------------------------------------------------------
+
 };
 
 #endif //FUNCTION_NODE_H_INCLUDED
