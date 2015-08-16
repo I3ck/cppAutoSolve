@@ -72,7 +72,15 @@ protected:
 
 //------------------------------------------------------------------------------
 
-    void connect_input(ParameterNode<T>* paraNode) {
+    //variadic function to connect many inputs
+    template <typename PNode, typename ... PNodes>
+    void connect_inputs(PNode pNode, PNodes... pNodes) {
+        connect_inputs(pNode);
+        connect_inputs(pNodes ...);
+    }
+
+
+    void connect_inputs(ParameterNode<T>* paraNode) {
         _InputParameterNodes[paraNode->_Identifier] = paraNode;
         paraNode->_OutputFunctionNodes.insert(this);
     }
@@ -106,9 +114,10 @@ protected:
 //------------------------------------------------------------------------------
 
 public:
-    FunctionNode& operator - (ParameterNode<T>& paraNode)
-    {
-        connect_input(&paraNode);
+
+    template <typename PNode, typename ... PNodes>
+    FunctionNode& operator ()(PNode pNode, PNodes... pNodes) {
+        connect_inputs(pNode, pNodes ...);
         return *this;
     }
 

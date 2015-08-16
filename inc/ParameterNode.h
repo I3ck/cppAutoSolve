@@ -77,7 +77,7 @@ public:
 
 //------------------------------------------------------------------------------
 
-    FunctionNode<T>& operator - (FunctionNode<T>& funcNode)
+    FunctionNode<T>& operator = (FunctionNode<T>& funcNode)
     {
         funcNode.connect_output(this);
         return funcNode;

@@ -92,7 +92,7 @@ public:
             && _KnownParameters.find(pNode) == _KnownParameters.end()) //only allow connections to added nodes
             throw std::runtime_error("Parameter node you are trying to connect not added yet. Make sure to add THEN connect");
 
-        fNode->connect_input(pNode);
+        fNode->connect_inputs(pNode);
     }
 
     //define connections between function- and parameter nodes
