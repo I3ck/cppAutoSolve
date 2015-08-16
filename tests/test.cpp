@@ -25,7 +25,7 @@ TEST_CASE("first case") {
     ParameterNode<double>
         x("x"), y("y"), z("z"), a("a");
 
-    y.set(7.5);
+    y = 7.5; //or y.set(7.5);
 
     AutoSolveController<double> controller;
 
