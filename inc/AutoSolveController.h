@@ -214,7 +214,7 @@ public:
             if(sValue == unknownVal)
                 continue;
 
-            stringstream ssValue(sValue);
+            std::stringstream ssValue(sValue);
 
 
             T value(0.0);
