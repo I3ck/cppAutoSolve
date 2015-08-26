@@ -9,3 +9,5 @@ namespace the autosolver
 allow systems with invalid nodes? (no value set and no function pointing to them)?
 
 own error type(s)
+
+some more todos with caching within AutoSolveController

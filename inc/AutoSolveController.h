@@ -23,6 +23,7 @@ along with cppAutoSolve.  If not, see <http://www.gnu.org/licenses/>.
 #include "../cppAutoSolve.h"
 
 #include <set>
+#include <map>
 #include <queue>
 #include <stdexcept>
 #include <sstream>
@@ -33,6 +34,10 @@ along with cppAutoSolve.  If not, see <http://www.gnu.org/licenses/>.
 template <typename T>
 class AutoSolveController {
 private:
+
+    std::map<std::string, ParameterNode<T>*>
+        _UnknownIdentifiers; //all the identifiers of unknown parameternodes, linking to them
+
     std::set<ParameterNode<T>*>
         _UnknownParameters, //all the parameter nodes, of which the value is unknown
         _KnownParameters; //all the parameter nodes, of which the value is known
@@ -63,8 +68,10 @@ public:
     void add(ParameterNode<T>* pNode) {
         if(pNode->_Known) //if already known, insert to known set
             _KnownParameters.insert(pNode);
-        else //else insert to unknown set
+        else { //else insert to unknown set
             _UnknownParameters.insert(pNode);
+            _UnknownIdentifiers.insert(std::make_pair(pNode->_Identifier, pNode));
+        }
     }
 
     //add a function node to the system
@@ -144,9 +151,15 @@ public:
 
             todoF->solve(); //solve the function
 
+            ///@todo cache find results, currently always searching twice (might happen in several spots)
+            ///@todo code duplicated in parse method
             _KnownParameters.insert(todoF->_ResultParameterNode); //add its output to known parameters
-            if(_UnknownParameters.find(todoF->_ResultParameterNode) != _UnknownParameters.end()) //and remove it from the unknown parameters
+            if(_UnknownParameters.find(todoF->_ResultParameterNode) != _UnknownParameters.end()) { //and remove it from the unknown parameters
                 _UnknownParameters.erase(_UnknownParameters.find(todoF->_ResultParameterNode));
+
+                if(_UnknownIdentifiers.find(todoF->_ResultParameterNode->_Identifier) != _UnknownIdentifiers.end())
+                    _UnknownIdentifiers.erase(_UnknownIdentifiers.find(todoF->_ResultParameterNode->_Identifier));
+            }
 
             //now check whether the now known output parameter
             //can be used to solve any of its functions
@@ -168,11 +181,55 @@ public:
 
 //------------------------------------------------------------------------------
 
-    std::string results_text(const std::string delimiter = " : ",
-                             const std::string before = "",
-                             const std::string after = "\n",
+    void parse_text(const std::string &text,
+                    const std::string &unknownVal = "NAN") {
+        std::stringstream textSs(text);
+        std::string line("");
+
+        while(std::getline(textSs, line)) {
+            std::stringstream lineSs(line);
+
+            if(!lineSs)
+                continue; //ignore empty lines
+
+            std::string identifier;
+            lineSs >> identifier;
+
+            if(!lineSs)
+                throw std::runtime_error("line '" + line + "'" + " is invalid");
+
+            std::string delimiter;
+            lineSs >> delimiter;
+
+            if(!lineSs)
+                throw std::runtime_error("line '" + line + "'" + " is invalid");
+
+            T value(0.0);
+
+            if(!(lineSs >> value))
+                throw std::runtime_error("line '" + line + "'" + " is invalid, value could not be converted");
+
+            ///@todo cache find iterator
+            if(_UnknownIdentifiers.find(identifier) == _UnknownIdentifiers.end())
+                throw std::runtime_error("Identifier '" + identifier + "'" + " either not in the system, or the value is already set");
+
+            auto itPParaNode = _UnknownIdentifiers.find(identifier);
+
+            ///@todo more checks?
+            itPParaNode->second->set(value);
+            _KnownParameters.insert(itPParaNode->second);
+            _UnknownParameters.erase(_UnknownParameters.find(itPParaNode->second));
+            _UnknownIdentifiers.erase(itPParaNode);
+        }
+}
+
+//------------------------------------------------------------------------------
+
+    std::string results_text(const std::string &delimiter = " : ",
+                             const std::string &before = "",
+                             const std::string &after = "\n",
                              bool printUnknown = true,
-                             const std::string unknownVal = "NAN") const {
+                             const std::string &unknownVal = "NAN") const {
         std::stringstream result("");
 
         for(auto knownP : _KnownParameters)

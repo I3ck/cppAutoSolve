@@ -25,7 +25,9 @@ TEST_CASE("first case") {
     ParameterNode<double>
         x("x"), y("y"), z("z"), a("a");
 
-    y = 7.5; //or y.set(7.5);
+    std::string parseableText("y = 7.5");
+    //or y = 7.5;
+    //or y.set(7.5);
 
     AutoSolveController<double> controller;
 
@@ -43,6 +45,7 @@ TEST_CASE("first case") {
     controller.connect_inputs(&fn3, &x, &y, &z);
     controller.connect_output(&fn3, &a);
 
+    controller.parse_text(parseableText);
     REQUIRE(controller.solve());
     std::cout << controller.results_text() << std::endl;
     REQUIRE(x.get() == 135.0);

@@ -4,7 +4,7 @@ This enables you to define and solve any system of equations, linear or not.
 
 
 
-##version 0.9
+##version 0.10
 
 ##solve any system
 Define your functions and pass them to the `FunctionNode` constructor, or directly use lambda expressions:  
@@ -34,6 +34,8 @@ Set values for known parameters:
 y.set(7.5)  
 //or
 y = 7.5;
+//or
+std::string parseable("y = 7.5") //call controller.parse_text(parseable) later
 ```
 
 Create the `AutoSolveController`:
