@@ -25,7 +25,7 @@ TEST_CASE("first case") {
     ParameterNode<double>
         x("x"), y("y"), z("z"), a("a");
 
-    std::string parseableText("y = 7.5");
+    std::string parseableText("y = 7.5 \n foo = NAN");
     //or y = 7.5;
     //or y.set(7.5);
 

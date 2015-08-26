@@ -4,7 +4,7 @@ This enables you to define and solve any system of equations, linear or not.
 
 
 
-##version 0.10
+##version 0.10.1
 
 ##solve any system
 Define your functions and pass them to the `FunctionNode` constructor, or directly use lambda expressions:  

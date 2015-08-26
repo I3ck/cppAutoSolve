@@ -204,9 +204,21 @@ public:
             if(!lineSs)
                 throw std::runtime_error("line '" + line + "'" + " is invalid");
 
-            T value(0.0);
+            std::string sValue;
 
-            if(!(lineSs >> value))
+            if(!lineSs)
+                throw std::runtime_error("line '" + line + "'" + " is invalid");
+
+            lineSs >> sValue;
+
+            if(sValue == unknownVal)
+                continue;
+
+            stringstream ssValue(sValue);
+
+
+            T value(0.0);
+            if(!(ssValue >> value))
                 throw std::runtime_error("line '" + line + "'" + " is invalid, value could not be converted");
 
             ///@todo cache find iterator
