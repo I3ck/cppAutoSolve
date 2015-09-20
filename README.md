@@ -4,7 +4,7 @@ This enables you to define and solve any system of equations, linear or not.
 
 
 
-##version 0.10.2
+##version 0.11.0
 
 ##solve any system
 Define your functions and pass them to the `FunctionNode` constructor, or directly use lambda expressions:  
@@ -70,6 +70,11 @@ controller.solve();
 If all parameters could be calculated, `solve()` will be `true`, otherwise `false`.  
 You can access the values with `ParameterNode.get()`  
 Or receive them as string via `AutoSolveController.results_text()`
+
+It is also possible to create dotfiles for e.g. graphviz by using
+```cpp
+    controller.as_dot_syntax();
+```
 
 ##building the examples / tests
 `make`

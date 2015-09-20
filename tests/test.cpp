@@ -52,4 +52,8 @@ TEST_CASE("first case") {
     REQUIRE(y.get() == 7.5);
     REQUIRE(z.get() == 1012.5);
     REQUIRE(a.get() == 2025.0);
+
+
+    //writing dotfile of the system
+    std::cout << controller.as_dot_syntax();
 }

@@ -254,6 +254,52 @@ public:
 
         return result.str();
     }
+
+//------------------------------------------------------------------------------
+
+    std::string as_dot_syntax() const {
+            //to name functions by their output parameters
+            //with raising numbers
+            //e.g. for parameter b => fb1, fb2, fb3, ...
+            std::map<string, int> functionCounts;
+
+            std::string result("digraph G {\n");
+
+            for(const auto & func : _UncalculateableFunctions) {
+                std::string& identifier = func->_ResultParameterNode->_Identifier;
+                int count = functionCounts[identifier]++;
+
+                if(func->_ResultParameterNode != nullptr)
+                    result += "f" + identifier + std::to_string(count+1) + " -> " + identifier + ";\n";
+
+                for(const auto& inputParameterNode : func->_InputParameterNodes)
+                    result += inputParameterNode.first + " -> " + "f" + identifier + std::to_string(count+1) + ";\n";
+
+            }
+
+            ///@todo write helper or lambda, since this is a copy of above
+            auto calculateableCopy = _CalculateableFunctions;
+
+            while(calculateableCopy.size() > 0) {
+                FunctionNode<T> *func = calculateableCopy.front();
+                calculateableCopy.pop();
+
+                std::string& identifier = func->_ResultParameterNode->_Identifier;
+                int count = functionCounts[identifier]++;
+
+                if(func->_ResultParameterNode != nullptr)
+                    result += "f" + identifier + std::to_string(count+1) + " -> " + identifier + ";\n";
+
+                for(const auto& inputParameterNode : func->_InputParameterNodes)
+                    result += inputParameterNode.first + " -> " + "f" + identifier + std::to_string(count+1) + ";\n";
+
+            }
+            result += "\n }";
+
+            return result;
+    }
+
+
 //------------------------------------------------------------------------------
 private:
 
