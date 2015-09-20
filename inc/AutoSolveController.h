@@ -265,25 +265,16 @@ public:
 
             std::string result("digraph G {\n");
 
-            for(const auto & func : _UncalculateableFunctions) {
-                std::string& identifier = func->_ResultParameterNode->_Identifier;
-                int count = functionCounts[identifier]++;
-
-                if(func->_ResultParameterNode != nullptr)
-                    result += "f" + identifier + std::to_string(count+1) + " -> " + identifier + ";\n";
-
-                for(const auto& inputParameterNode : func->_InputParameterNodes)
-                    result += inputParameterNode.first + " -> " + "f" + identifier + std::to_string(count+1) + ";\n";
-
+            std::set<FunctionNode<T>*> fNodes;
+            for(auto knownP : _KnownParameters) {
+                //find the functions they're used as parameter in
+                for(auto func : knownP->_OutputFunctionNodes) {
+                    //and add them to the todo if they can be calculaed
+                    fNodes.insert(func);
+                }
             }
 
-            ///@todo write helper or lambda, since this is a copy of above
-            auto calculateableCopy = _CalculateableFunctions;
-
-            while(calculateableCopy.size() > 0) {
-                FunctionNode<T> *func = calculateableCopy.front();
-                calculateableCopy.pop();
-
+            for (const auto &func : fNodes) {
                 std::string& identifier = func->_ResultParameterNode->_Identifier;
                 int count = functionCounts[identifier]++;
 
