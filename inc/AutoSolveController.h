@@ -261,7 +261,7 @@ public:
             //to name functions by their output parameters
             //with raising numbers
             //e.g. for parameter b => fb1, fb2, fb3, ...
-            std::map<string, int> functionCounts;
+            std::map<std::string, int> functionCounts;
 
             std::string result("digraph G {\n");
 
