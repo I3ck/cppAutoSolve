@@ -23,6 +23,7 @@ along with cppAutoSolve.  If not, see <http://www.gnu.org/licenses/>.
 #include "../cppAutoSolve.h"
 
 #include <set>
+#include<string>
 
 template <typename T>
 class FunctionNode;
