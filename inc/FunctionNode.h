@@ -23,6 +23,7 @@ along with cppAutoSolve.  If not, see <http://www.gnu.org/licenses/>.
 #include "../cppAutoSolve.h"
 
 #include <map>
+#include <functional>
 
 template <typename T>
 class ParameterNode;
