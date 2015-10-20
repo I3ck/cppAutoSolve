@@ -246,6 +246,7 @@ public:
             ///@todo more checks?
             itPParaNode->second->set(value);
             _KnownParameters.insert(itPParaNode->second);
+            _KnownIdentifiers[identifier] = itPParaNode->second;
             _UnknownParameters.erase(_UnknownParameters.find(itPParaNode->second));
             _UnknownIdentifiers.erase(itPParaNode);
         }
