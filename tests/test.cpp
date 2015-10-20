@@ -53,6 +53,12 @@ TEST_CASE("first case") {
     REQUIRE(z.get() == 1012.5);
     REQUIRE(a.get() == 2025.0);
 
+    double result;
+    REQUIRE(!controller.try_get("NOT_EXISTANT", result));
+
+    REQUIRE(controller.try_get("x", result));
+    REQUIRE(result == x.get());
+
 
     //writing dotfile of the system
     std::cout << controller.as_dot_syntax();

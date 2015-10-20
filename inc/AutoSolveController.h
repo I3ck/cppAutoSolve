@@ -36,6 +36,7 @@ class AutoSolveController {
 private:
 
     std::map<std::string, ParameterNode<T>*>
+        _KnownIdentifiers, //all the identifiers of known parameternodes, linking to them
         _UnknownIdentifiers; //all the identifiers of unknown parameternodes, linking to them
 
     std::set<ParameterNode<T>*>
@@ -57,6 +58,8 @@ public:
         _Solved(false)
     {}
 
+//------------------------------------------------------------------------------
+
     //variadic function to add any nodes
     template <typename Node, typename ... Nodes>
     void add(Node node, Nodes... nodes) {
@@ -66,8 +69,10 @@ public:
 
     //add a parameter node to the system
     void add(ParameterNode<T>* pNode) {
-        if(pNode->_Known) //if already known, insert to known set
+        if(pNode->_Known) { //if already known, insert to known set
             _KnownParameters.insert(pNode);
+            _KnownIdentifiers.insert(std::make_pair(pNode->_Identifier, pNode));
+        }
         else { //else insert to unknown set
             _UnknownParameters.insert(pNode);
             _UnknownIdentifiers.insert(std::make_pair(pNode->_Identifier, pNode));
@@ -79,6 +84,16 @@ public:
         if(fNode->_Calculated) //all function nodes should be uncalculated in the beginning
             throw std::runtime_error("Do not add already calculated function nodes");
         _UncalculateableFunctions.insert(fNode);
+    }
+
+//------------------------------------------------------------------------------
+
+    bool try_get(const std::string &identifier, T &result) const {
+        auto it = _KnownIdentifiers.find(identifier);
+        if(it == _KnownIdentifiers.end())
+            return false;
+        result = it->second->_Val;
+        return true;
     }
 
 //------------------------------------------------------------------------------
@@ -154,6 +169,7 @@ public:
             ///@todo cache find results, currently always searching twice (might happen in several spots)
             ///@todo code duplicated in parse method
             _KnownParameters.insert(todoF->_ResultParameterNode); //add its output to known parameters
+            _KnownIdentifiers[todoF->_ResultParameterNode->_Identifier] = todoF->_ResultParameterNode;
             if(_UnknownParameters.find(todoF->_ResultParameterNode) != _UnknownParameters.end()) { //and remove it from the unknown parameters
                 _UnknownParameters.erase(_UnknownParameters.find(todoF->_ResultParameterNode));
 
